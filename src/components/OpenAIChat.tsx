@@ -59,6 +59,8 @@ Try asking me:
     }
 
     try {
+      console.log('Making OpenAI request with API key:', apiKey.substring(0, 10) + '...');
+      
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -94,15 +96,20 @@ Provide actionable insights in a professional but accessible tone. Use data from
         }),
       });
 
+      console.log('OpenAI response status:', response.status);
+
       if (!response.ok) {
-        throw new Error(`OpenAI API error: ${response.status}`);
+        const errorData = await response.json();
+        console.error('OpenAI API error:', errorData);
+        throw new Error(`OpenAI API error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`);
       }
 
       const data = await response.json();
+      console.log('OpenAI response received successfully');
       return data.choices[0]?.message?.content || "I couldn't generate a response. Please try again.";
     } catch (error) {
       console.error('OpenAI API error:', error);
-      return "I'm having trouble connecting to OpenAI. Please check your API key and try again.";
+      return `I'm having trouble connecting to OpenAI: ${error instanceof Error ? error.message : 'Unknown error'}. Please check your API key and try again.`;
     }
   };
 

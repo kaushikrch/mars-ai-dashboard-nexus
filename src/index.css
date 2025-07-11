@@ -9,23 +9,23 @@ All colors MUST be HSL.
 @layer base {
   :root {
     /* Mars Brand Colors - Mars Blue Theme */
-    --background: 215 35% 15%;
-    --foreground: 210 40% 98%;
+    --background: 215 25% 95%;
+    --foreground: 215 40% 15%;
 
-    --card: 215 30% 18%;
-    --card-foreground: 210 40% 98%;
+    --card: 215 25% 90%;
+    --card-foreground: 215 40% 15%;
 
-    --popover: 215 30% 18%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 215 25% 90%;
+    --popover-foreground: 215 40% 15%;
 
     --primary: 45 100% 55%;
-    --primary-foreground: 215 35% 15%;
+    --primary-foreground: 215 40% 15%;
 
-    --secondary: 215 25% 25%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 215 15% 85%;
+    --secondary-foreground: 215 40% 15%;
 
-    --muted: 215 25% 22%;
-    --muted-foreground: 215 20% 70%;
+    --muted: 215 15% 85%;
+    --muted-foreground: 215 40% 40%;
 
     --accent: 45 100% 55%;
     --accent-foreground: 215 35% 15%;
