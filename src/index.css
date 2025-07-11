@@ -8,41 +8,42 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Mars Brand Colors - Deep Blue & Golden Yellow */
-    --background: 215 30% 8%;
+    /* Mars Brand Colors - Mars Blue Theme */
+    --background: 215 35% 15%;
     --foreground: 210 40% 98%;
 
-    --card: 217 30% 12%;
+    --card: 215 30% 18%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 217 30% 12%;
+    --popover: 215 30% 18%;
     --popover-foreground: 210 40% 98%;
 
     --primary: 45 100% 55%;
-    --primary-foreground: 215 30% 8%;
+    --primary-foreground: 215 35% 15%;
 
-    --secondary: 217 25% 20%;
+    --secondary: 215 25% 25%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 217 25% 15%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 215 25% 22%;
+    --muted-foreground: 215 20% 70%;
 
     --accent: 45 100% 55%;
-    --accent-foreground: 215 30% 8%;
+    --accent-foreground: 215 35% 15%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217 25% 20%;
-    --input: 217 25% 20%;
+    --border: 215 25% 25%;
+    --input: 215 25% 25%;
     --ring: 45 100% 55%;
 
     --radius: 0.75rem;
 
     /* Mars Custom Design Tokens */
-    --mars-blue-deep: 215 30% 8%;
-    --mars-blue-primary: 217 30% 12%;
-    --mars-blue-secondary: 217 25% 20%;
+    --mars-blue-deep: 215 40% 12%;
+    --mars-blue-primary: 215 35% 15%;
+    --mars-blue-secondary: 215 25% 25%;
+    --mars-blue-light: 215 20% 35%;
     --mars-yellow: 45 100% 55%;
     --mars-yellow-glow: 45 100% 65%;
     
@@ -52,14 +53,14 @@ All colors MUST be HSL.
     --danger: 0 84% 60%;
     
     /* Gradients */
-    --gradient-mars: linear-gradient(135deg, hsl(var(--mars-blue-deep)), hsl(var(--mars-blue-primary)));
-    --gradient-performance: linear-gradient(90deg, hsl(var(--success)), hsl(var(--mars-yellow)));
-    --gradient-glow: linear-gradient(135deg, hsl(var(--mars-yellow) / 0.1), hsl(var(--mars-yellow) / 0.05));
+    --gradient-mars: linear-gradient(135deg, hsl(215 40% 12%), hsl(215 35% 15%));
+    --gradient-performance: linear-gradient(90deg, hsl(142 76% 36%), hsl(45 100% 55%));
+    --gradient-glow: linear-gradient(135deg, hsl(45 100% 55% / 0.1), hsl(45 100% 55% / 0.05));
     
     /* Shadows */
-    --shadow-mars: 0 10px 30px -10px hsl(var(--mars-blue-deep) / 0.8);
-    --shadow-glow: 0 0 40px hsl(var(--mars-yellow) / 0.15);
-    --shadow-card: 0 8px 32px -8px hsl(var(--mars-blue-deep) / 0.6);
+    --shadow-mars: 0 10px 30px -10px hsl(215 40% 8% / 0.8);
+    --shadow-glow: 0 0 40px hsl(45 100% 55% / 0.15);
+    --shadow-card: 0 8px 32px -8px hsl(215 40% 8% / 0.6);
     
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);

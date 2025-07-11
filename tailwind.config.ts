@@ -57,7 +57,8 @@ export default {
 					blue: {
 						deep: 'hsl(var(--mars-blue-deep))',
 						primary: 'hsl(var(--mars-blue-primary))',
-						secondary: 'hsl(var(--mars-blue-secondary))'
+						secondary: 'hsl(var(--mars-blue-secondary))',
+						light: 'hsl(var(--mars-blue-light))'
 					},
 					yellow: {
 						DEFAULT: 'hsl(var(--mars-yellow))',

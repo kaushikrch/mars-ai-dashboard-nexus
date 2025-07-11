@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Minimize2, Maximize2, Mic, MicOff } from 'lucide-react';
+import { Send, Bot, User, Minimize2, Mic, MicOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { OpenAIConfig } from './OpenAIConfig';
 
 interface Message {
   id: string;
@@ -23,7 +24,7 @@ export const OpenAIChat = ({ isCollapsed, onToggle, currentContext }: OpenAIChat
     {
       id: '1',
       role: 'assistant',
-      content: `👋 Hi! I'm your Mars DCom AI Assistant. I can help you interpret metrics, generate insights, create slide narratives, and answer questions about your performance data.
+      content: `👋 Hi! I'm your Mars DCom AI Assistant powered by GPT-4. I can help you interpret metrics, generate insights, create slide narratives, and answer questions about your performance data.
 
 Try asking me:
 • "Why is Gum performing better than Chocolate?"
@@ -36,6 +37,7 @@ Try asking me:
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
+  const [apiKey, setApiKey] = useState(localStorage.getItem('openai_api_key') || '');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -45,6 +47,64 @@ Try asking me:
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  const handleApiKeySet = (key: string) => {
+    setApiKey(key);
+    localStorage.setItem('openai_api_key', key);
+  };
+
+  const callOpenAI = async (userMessage: string): Promise<string> => {
+    if (!apiKey) {
+      return "Please configure your OpenAI API key to use real AI insights.";
+    }
+
+    try {
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'gpt-4',
+          messages: [
+            {
+              role: 'system',
+              content: `You are an AI assistant for Mars DCom Performance Intelligence. You help analyze digital commerce metrics, provide insights, and generate business narratives. 
+
+Current context: ${currentContext || 'General dashboard'}
+
+Available data includes:
+- Digital Sales YTD: $47.2M (+16.3% vs LY)
+- Category Share: 18.2% (+1.4 pts YoY)  
+- Top Retailers: Walmart (+24%), Target (+19%), Amazon (-8%)
+- Top Brands: Skittles (+34%), Snickers (+21%), M&M (+7%)
+- Search Performance: +18% PDP traffic, $4.2 ROAS
+- Categories: Gum outperforming Chocolate significantly
+
+Provide actionable insights in a professional but accessible tone. Use data from the context above to support your responses.`
+            },
+            {
+              role: 'user',
+              content: userMessage
+            }
+          ],
+          temperature: 0.7,
+          max_tokens: 500
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`OpenAI API error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data.choices[0]?.message?.content || "I couldn't generate a response. Please try again.";
+    } catch (error) {
+      console.error('OpenAI API error:', error);
+      return "I'm having trouble connecting to OpenAI. Please check your API key and try again.";
+    }
+  };
 
   const mockAIResponse = (userMessage: string): string => {
     const lowerMsg = userMessage.toLowerCase();
@@ -83,52 +143,7 @@ Try asking me:
 • Q3 Halloween prep starting early this year`;
     }
     
-    if (lowerMsg.includes('deck') || lowerMsg.includes('slide')) {
-      return `📋 **Slide Generation Ready**
-
-I can create persona-based decks for you:
-
-**Quick Options:**
-• 5-slide Executive Summary
-• 10-slide Business Review  
-• 30-slide Deep Dive
-
-**Custom Options:**
-• Walmart-specific MBR deck
-• Category performance analysis
-• Media ROI optimization story
-
-Would you like me to generate a specific deck? Just tell me the audience and key focus areas!`;
-    }
-    
-    if (lowerMsg.includes('search') || lowerMsg.includes('ranking')) {
-      return `🔍 **Search Performance Insights**
-
-**Overall Search Impact:**
-• PDP Traffic: +18% QoQ
-• Keyword ROI: $4.2 ROAS (vs $3.1 category avg)
-• Voice search queries: +45% for Mars brands
-
-**Top Performers:**
-• Skittles: #3 ranking for "fruit candy" (+5 positions)
-• Snickers: 89% share of "satisfying snack" searches
-• M&M: Strong in "movie candy" vertical
-
-**Microseason Success:**
-• Back-to-school: 67% lift in relevant categories
-• Halloween prep: Early signals showing 23% increase`;
-    }
-
-    // Default response
-    return `🤖 I understand you're asking about "${userMessage}". Based on your current Mars DCom data:
-
-**Quick Insights:**
-• YTD Digital Sales are tracking +16% vs LY
-• Top performing channel: Walmart (+24% GSV)
-• Biggest opportunity: Amazon optimization (-8% velocity)
-• Next recommended action: Review Q3 media allocation
-
-**How can I help you dive deeper?** I can analyze specific metrics, generate narratives, or create presentation slides for any stakeholder.`;
+    return `🤖 Based on your Mars DCom data: YTD Digital Sales are tracking +16% vs LY. Top performing channel: Walmart (+24% GSV). Biggest opportunity: Amazon optimization (-8% velocity). Next recommended action: Review Q3 media allocation.`;
   };
 
   const handleSend = async () => {
@@ -145,17 +160,24 @@ Would you like me to generate a specific deck? Just tell me the audience and key
     setInput('');
     setIsLoading(true);
 
-    // Simulate AI response delay
-    setTimeout(() => {
+    try {
+      const response = apiKey 
+        ? await callOpenAI(input)
+        : mockAIResponse(input);
+
       const aiResponse: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: mockAIResponse(input),
+        content: response,
         timestamp: new Date()
       };
+      
       setMessages(prev => [...prev, aiResponse]);
+    } catch (error) {
+      console.error('Error getting AI response:', error);
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   const toggleVoice = () => {
@@ -183,11 +205,22 @@ Would you like me to generate a specific deck? Just tell me the audience and key
         <div className="flex items-center gap-2">
           <Bot className="h-5 w-5 text-primary" />
           <span className="font-semibold">Mars AI Assistant</span>
+          {apiKey && <span className="text-xs text-success">●</span>}
         </div>
         <Button variant="ghost" size="sm" onClick={onToggle}>
           <Minimize2 className="h-4 w-4" />
         </Button>
       </div>
+
+      {/* API Key Configuration */}
+      {!apiKey && (
+        <div className="p-4 border-b border-mars-blue-secondary">
+          <OpenAIConfig 
+            onApiKeySet={handleApiKeySet}
+            hasApiKey={!!apiKey}
+          />
+        </div>
+      )}
 
       {/* Messages */}
       <ScrollArea className="flex-1 p-4">

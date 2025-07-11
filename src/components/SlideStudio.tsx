@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { SlidePreview } from '@/components/SlidePreview';
+import { generateMarsSlideContent, DeckData } from '@/utils/slideGenerator';
 import { Presentation, Download, Share2, Eye, Edit3, ArrowUpDown, FileText, Sparkles } from 'lucide-react';
 
 const slideTemplates = {
