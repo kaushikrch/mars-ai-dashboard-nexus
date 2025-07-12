@@ -37,8 +37,16 @@ Try asking me:
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
-  const [apiKey, setApiKey] = useState(localStorage.getItem('openai_api_key') || '');
+  const [apiKey, setApiKey] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Initialize API key from localStorage on component mount
+  useEffect(() => {
+    const storedKey = localStorage.getItem('openai_api_key');
+    if (storedKey && storedKey.trim()) {
+      setApiKey(storedKey.trim());
+    }
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -49,22 +57,30 @@ Try asking me:
   }, [messages]);
 
   const handleApiKeySet = (key: string) => {
-    setApiKey(key);
-    localStorage.setItem('openai_api_key', key);
+    const trimmedKey = key.trim();
+    setApiKey(trimmedKey);
+    localStorage.setItem('openai_api_key', trimmedKey);
+  };
+
+  const clearApiKey = () => {
+    setApiKey('');
+    localStorage.removeItem('openai_api_key');
   };
 
   const callOpenAI = async (userMessage: string): Promise<string> => {
-    if (!apiKey) {
-      return "Please configure your OpenAI API key to use real AI insights.";
+    const currentApiKey = apiKey.trim();
+    
+    if (!currentApiKey || currentApiKey.length < 10) {
+      return "❗ **API Key Required**: Please configure your OpenAI API key above to enable real AI insights. The key should start with 'sk-proj-' or 'sk-'.";
     }
 
     try {
-      console.log('Making OpenAI request with API key:', apiKey.substring(0, 10) + '...');
+      console.log('Making OpenAI request with API key length:', currentApiKey.length);
       
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${apiKey}`,
+          'Authorization': `Bearer ${currentApiKey}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -101,6 +117,13 @@ Provide actionable insights in a professional but accessible tone. Use data from
       if (!response.ok) {
         const errorData = await response.json();
         console.error('OpenAI API error:', errorData);
+        
+        if (response.status === 401) {
+          // Clear invalid API key
+          clearApiKey();
+          return "❌ **Invalid API Key**: Your OpenAI API key is invalid or expired. Please enter a new API key above. You can get one from https://platform.openai.com/api-keys";
+        }
+        
         throw new Error(`OpenAI API error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`);
       }
 
@@ -109,7 +132,11 @@ Provide actionable insights in a professional but accessible tone. Use data from
       return data.choices[0]?.message?.content || "I couldn't generate a response. Please try again.";
     } catch (error) {
       console.error('OpenAI API error:', error);
-      return `I'm having trouble connecting to OpenAI: ${error instanceof Error ? error.message : 'Unknown error'}. Please check your API key and try again.`;
+      if (error instanceof Error && error.message.includes('401')) {
+        clearApiKey();
+        return "❌ **Authentication Error**: Please check your OpenAI API key and try again.";
+      }
+      return `🔧 **Connection Error**: ${error instanceof Error ? error.message : 'Unknown error'}. Please check your API key and internet connection.`;
     }
   };
 
@@ -168,7 +195,7 @@ Provide actionable insights in a professional but accessible tone. Use data from
     setIsLoading(true);
 
     try {
-      const response = apiKey 
+      const response = apiKey.trim() 
         ? await callOpenAI(input)
         : mockAIResponse(input);
 
@@ -212,7 +239,11 @@ Provide actionable insights in a professional but accessible tone. Use data from
         <div className="flex items-center gap-2">
           <Bot className="h-5 w-5 text-primary" />
           <span className="font-semibold">Mars AI Assistant</span>
-          {apiKey && <span className="text-xs text-success">●</span>}
+          {apiKey.trim() ? (
+            <span className="text-xs text-success">● Connected</span>
+          ) : (
+            <span className="text-xs text-warning">● API Key Required</span>
+          )}
         </div>
         <Button variant="ghost" size="sm" onClick={onToggle}>
           <Minimize2 className="h-4 w-4" />
@@ -220,11 +251,11 @@ Provide actionable insights in a professional but accessible tone. Use data from
       </div>
 
       {/* API Key Configuration */}
-      {!apiKey && (
+      {!apiKey.trim() && (
         <div className="p-4 border-b border-mars-blue-secondary">
           <OpenAIConfig 
             onApiKeySet={handleApiKeySet}
-            hasApiKey={!!apiKey}
+            hasApiKey={!!apiKey.trim()}
           />
         </div>
       )}

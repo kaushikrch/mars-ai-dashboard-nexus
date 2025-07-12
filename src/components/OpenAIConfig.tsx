@@ -39,10 +39,12 @@ export const OpenAIConfig = ({ onApiKeySet, hasApiKey }: OpenAIConfigProps) => {
         OpenAI API Configuration
       </h3>
       
-      <Alert className="mb-4">
+      <Alert className="mb-4 bg-warning/20 border-warning">
         <AlertDescription>
-          To enable real AI insights and slide generation, please provide your OpenAI API key. 
-          For production use, connect to Supabase for secure key management.
+          <strong>🔑 API Key Required:</strong> To enable real AI insights and slide generation, please provide your OpenAI API key. 
+          <br /><br />
+          <strong>⚠️ Security Note:</strong> For production use, we recommend connecting to Supabase for secure key management. 
+          <a href="https://supabase.com" target="_blank" rel="noopener noreferrer" className="text-primary underline">Learn about Supabase integration</a>
         </AlertDescription>
       </Alert>
 
@@ -50,10 +52,11 @@ export const OpenAIConfig = ({ onApiKeySet, hasApiKey }: OpenAIConfigProps) => {
         <div className="relative">
           <Input
             type={showKey ? 'text' : 'password'}
-            placeholder="sk-proj-..."
+            placeholder="Enter your OpenAI API key (sk-proj-... or sk-...)"
             value={apiKey}
             onChange={(e) => setApiKey(e.target.value)}
             className="pr-10"
+            autoComplete="off"
           />
           <button
             type="button"
@@ -70,7 +73,8 @@ export const OpenAIConfig = ({ onApiKeySet, hasApiKey }: OpenAIConfigProps) => {
       </form>
 
       <div className="mt-4 text-xs text-muted-foreground">
-        Your API key is stored locally and never transmitted except to OpenAI's servers.
+        <p>✅ Your API key is stored locally and only sent to OpenAI's servers.</p>
+        <p>🔗 Get your API key from: <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer" className="text-primary underline">OpenAI Platform</a></p>
       </div>
     </Card>
   );
