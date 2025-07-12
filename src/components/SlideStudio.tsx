@@ -218,7 +218,7 @@ export const SlideStudio = () => {
         <Card className="p-6 bg-gradient-glow border-mars-blue-secondary shadow-card">
           <h3 className="font-semibold mb-4 flex items-center gap-2">
             <FileText className="h-5 w-5 text-primary" />
-            Deck Template
+            Deck Template & Export Manager
           </h3>
           <Select value={selectedTemplate} onValueChange={(value) => setSelectedTemplate(value as keyof typeof slideTemplates)}>
             <SelectTrigger>

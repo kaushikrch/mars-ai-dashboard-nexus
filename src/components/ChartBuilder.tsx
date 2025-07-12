@@ -345,8 +345,20 @@ export const ChartBuilder = () => {
           </div>
 
           {selectedMetrics.length > 0 ? (
-            <div className="bg-white rounded-lg p-4">
+            <div className="bg-white rounded-lg p-4 relative group">
               {renderChart()}
+              
+              {/* Interactive Overlay */}
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100">
+                <div className="flex gap-2">
+                  <Button variant="secondary" size="sm" className="bg-white/90 hover:bg-white">
+                    Drill Down
+                  </Button>
+                  <Button variant="secondary" size="sm" className="bg-white/90 hover:bg-white">
+                    Add Filter
+                  </Button>
+                </div>
+              </div>
             </div>
           ) : (
             <div className="flex items-center justify-center h-96 bg-muted/30 rounded-lg">

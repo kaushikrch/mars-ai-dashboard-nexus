@@ -11,7 +11,8 @@ import { PredictivePerformance } from '@/components/PredictivePerformance';
 import { AIInsights } from '@/components/AIInsights';
 import { DataQuality } from '@/components/DataQuality';
 import { ChartBuilder } from '@/components/ChartBuilder';
-import { BarChart3, Users, Search, Presentation, TrendingUp, Brain, Database, PlusCircle } from 'lucide-react';
+import { GPDReporting } from '@/components/GPDReporting';
+import { BarChart3, Users, Search, Presentation, TrendingUp, Brain, Database, PlusCircle, FileSpreadsheet } from 'lucide-react';
 
 export const MarsDashboard = () => {
   const [isChatCollapsed, setIsChatCollapsed] = useState(false);
@@ -26,7 +27,8 @@ export const MarsDashboard = () => {
     insights: 'AI Insights - Strategic Reasoning & Plans',
     slides: 'Slide Studio - Presentation Generation',
     quality: 'Data Quality - Health & Monitoring',
-    builder: 'Chart Builder - Custom Visualizations'
+    builder: 'Chart Builder - Custom Visualizations',
+    gpd: 'GPD Reporting - Comprehensive Business Analysis'
   };
 
   if (isLoading) {
@@ -40,8 +42,8 @@ export const MarsDashboard = () => {
       <div className={`transition-all duration-300 ${isChatCollapsed ? 'mr-0' : 'mr-[400px]'}`}>
         <main className="container mx-auto p-6">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-            <div className="overflow-x-auto">
-              <TabsList className="grid w-full grid-cols-8 bg-mars-blue-secondary min-w-[800px] text-primary-foreground">
+            <div className="overflow-x-auto scrollbar-hide">
+              <TabsList className="grid w-full grid-cols-9 bg-mars-blue-secondary min-w-[900px] lg:min-w-0 text-primary-foreground">
                 <TabsTrigger 
                   value="executive" 
                   className="flex items-center gap-2 text-primary-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
@@ -98,6 +100,13 @@ export const MarsDashboard = () => {
                   <PlusCircle className="h-4 w-4" />
                   Builder
                 </TabsTrigger>
+                <TabsTrigger 
+                  value="gpd" 
+                  className="flex items-center gap-2 text-primary-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                >
+                  <FileSpreadsheet className="h-4 w-4" />
+                  GPD
+                </TabsTrigger>
               </TabsList>
             </div>
 
@@ -131,6 +140,10 @@ export const MarsDashboard = () => {
 
             <TabsContent value="builder" className="space-y-6">
               <ChartBuilder />
+            </TabsContent>
+
+            <TabsContent value="gpd" className="space-y-6">
+              <GPDReporting />
             </TabsContent>
           </Tabs>
         </main>

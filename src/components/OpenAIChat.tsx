@@ -285,7 +285,7 @@ Provide actionable insights in a professional but accessible tone. Use data from
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask about your Mars performance..."
+            placeholder="Ask about Mars performance or @mention colleagues..."
             onKeyPress={(e) => e.key === 'Enter' && handleSend()}
             className="flex-1"
           />
@@ -294,11 +294,48 @@ Provide actionable insights in a professional but accessible tone. Use data from
             size="sm"
             onClick={toggleVoice}
             className={isListening ? 'text-primary' : ''}
+            title="Voice Input"
           >
             {isListening ? <Mic className="h-4 w-4" /> : <MicOff className="h-4 w-4" />}
           </Button>
-          <Button onClick={handleSend} disabled={!input.trim() || isLoading}>
+          <Button onClick={handleSend} disabled={!input.trim() || isLoading} title="Send Message">
             <Send className="h-4 w-4" />
+          </Button>
+        </div>
+        
+        {/* Collaboration Features */}
+        <div className="mt-3 flex flex-wrap gap-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-xs h-6 px-2"
+            onClick={() => setInput(input + '@stakeholder ')}
+          >
+            @Stakeholder
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-xs h-6 px-2"
+            onClick={() => setInput(input + '@manager ')}
+          >
+            @Manager
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-xs h-6 px-2"
+            onClick={() => setInput(input + '#action-required ')}
+          >
+            #ActionRequired
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-xs h-6 px-2"
+            onClick={() => setInput(input + '#insights ')}
+          >
+            #Insights
           </Button>
         </div>
         {currentContext && (
