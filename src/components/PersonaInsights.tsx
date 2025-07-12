@@ -176,11 +176,11 @@ export const PersonaInsights = () => {
             <p className="font-medium">Generate Deck</p>
             <p className="text-xs opacity-90">Create persona-specific slides</p>
           </button>
-          <button className="p-3 rounded-lg bg-mars-blue-secondary hover:bg-mars-blue-secondary/90 transition-colors text-left">
+          <button className="p-3 rounded-lg bg-mars-blue-secondary text-primary-foreground hover:bg-mars-blue-secondary/90 transition-colors text-left">
             <p className="font-medium">Deep Dive Analysis</p>
             <p className="text-xs opacity-90">Detailed performance review</p>
           </button>
-          <button className="p-3 rounded-lg bg-mars-blue-secondary hover:bg-mars-blue-secondary/90 transition-colors text-left">
+          <button className="p-3 rounded-lg bg-mars-blue-secondary text-primary-foreground hover:bg-mars-blue-secondary/90 transition-colors text-left">
             <p className="font-medium">Export Data</p>
             <p className="text-xs opacity-90">Download insights & metrics</p>
           </button>
