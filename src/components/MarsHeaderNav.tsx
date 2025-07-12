@@ -1,9 +1,52 @@
+import { useState, useRef } from 'react';
 import { MarsLogo } from './MarsLogo';
 import { MarsButton } from './MarsButton';
 import { Badge } from '@/components/ui/badge';
+import { useToast } from '@/hooks/use-toast';
 import { Bell, Settings, User, Upload, LogOut } from 'lucide-react';
 
 export const MarsHeaderNav = () => {
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    const allowedTypes = ['.csv', '.xlsx', '.xls', '.json'];
+    const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase();
+    
+    if (!allowedTypes.includes(fileExtension)) {
+      toast({
+        title: "Invalid file type",
+        description: "Please upload a CSV, Excel, or JSON file.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsUploading(true);
+    
+    // Simulate file processing
+    setTimeout(() => {
+      setIsUploading(false);
+      toast({
+        title: "Upload successful",
+        description: `${file.name} has been processed and integrated into your dashboard.`,
+      });
+      
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }, 2000);
+  };
+
+  const triggerFileUpload = () => {
+    fileInputRef.current?.click();
+  };
   return (
     <header className="sticky top-0 z-30 border-b border-mars-blue-secondary bg-background/95 backdrop-blur-sm">
       <div className="flex h-16 items-center justify-between px-6">
@@ -27,9 +70,21 @@ export const MarsHeaderNav = () => {
             </span>
           </div>
 
-          <MarsButton variant="ghost" size="sm">
-            <Upload className="h-4 w-4 mr-2" />
-            Upload Data
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".csv,.xlsx,.xls,.json"
+            onChange={handleFileUpload}
+            className="hidden"
+          />
+          <MarsButton 
+            variant="ghost" 
+            size="sm"
+            onClick={triggerFileUpload}
+            disabled={isUploading}
+          >
+            <Upload className={`h-4 w-4 mr-2 ${isUploading ? 'animate-spin' : ''}`} />
+            {isUploading ? 'Processing...' : 'Upload Data'}
           </MarsButton>
 
           <MarsButton variant="ghost" size="sm">
