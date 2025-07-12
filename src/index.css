@@ -9,41 +9,41 @@ All colors MUST be HSL.
 @layer base {
   :root {
     /* Mars Brand Colors - Mars Blue Theme */
-    --background: 215 25% 95%;
+    --background: 210 40% 98%;
     --foreground: 215 40% 15%;
 
-    --card: 215 25% 90%;
+    --card: 215 30% 96%;
     --card-foreground: 215 40% 15%;
 
-    --popover: 215 25% 90%;
+    --popover: 215 30% 96%;
     --popover-foreground: 215 40% 15%;
 
-    --primary: 45 100% 55%;
-    --primary-foreground: 215 40% 15%;
+    --primary: 215 50% 35%;
+    --primary-foreground: 210 40% 98%;
 
-    --secondary: 215 15% 85%;
+    --secondary: 215 30% 88%;
     --secondary-foreground: 215 40% 15%;
 
-    --muted: 215 15% 85%;
-    --muted-foreground: 215 40% 40%;
+    --muted: 215 20% 92%;
+    --muted-foreground: 215 30% 45%;
 
     --accent: 45 100% 55%;
-    --accent-foreground: 215 35% 15%;
+    --accent-foreground: 215 40% 15%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 215 25% 25%;
-    --input: 215 25% 25%;
-    --ring: 45 100% 55%;
+    --border: 215 20% 80%;
+    --input: 215 20% 88%;
+    --ring: 215 50% 35%;
 
     --radius: 0.75rem;
 
     /* Mars Custom Design Tokens */
-    --mars-blue-deep: 215 40% 12%;
-    --mars-blue-primary: 215 35% 15%;
-    --mars-blue-secondary: 215 25% 25%;
-    --mars-blue-light: 215 20% 35%;
+    --mars-blue-deep: 215 50% 25%;
+    --mars-blue-primary: 215 50% 35%;
+    --mars-blue-secondary: 215 40% 45%;
+    --mars-blue-light: 215 30% 60%;
     --mars-yellow: 45 100% 55%;
     --mars-yellow-glow: 45 100% 65%;
     
@@ -53,14 +53,14 @@ All colors MUST be HSL.
     --danger: 0 84% 60%;
     
     /* Gradients */
-    --gradient-mars: linear-gradient(135deg, hsl(215 40% 12%), hsl(215 35% 15%));
-    --gradient-performance: linear-gradient(90deg, hsl(142 76% 36%), hsl(45 100% 55%));
-    --gradient-glow: linear-gradient(135deg, hsl(45 100% 55% / 0.1), hsl(45 100% 55% / 0.05));
+    --gradient-mars: linear-gradient(135deg, hsl(215 50% 25%), hsl(215 50% 35%));
+    --gradient-performance: linear-gradient(90deg, hsl(215 50% 35%), hsl(45 100% 55%));
+    --gradient-glow: linear-gradient(135deg, hsl(215 30% 96%), hsl(215 20% 92%));
     
     /* Shadows */
-    --shadow-mars: 0 10px 30px -10px hsl(215 40% 8% / 0.8);
-    --shadow-glow: 0 0 40px hsl(45 100% 55% / 0.15);
-    --shadow-card: 0 8px 32px -8px hsl(215 40% 8% / 0.6);
+    --shadow-mars: 0 10px 30px -10px hsl(215 50% 25% / 0.3);
+    --shadow-glow: 0 0 40px hsl(215 50% 35% / 0.15);
+    --shadow-card: 0 8px 32px -8px hsl(215 50% 25% / 0.2);
     
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);

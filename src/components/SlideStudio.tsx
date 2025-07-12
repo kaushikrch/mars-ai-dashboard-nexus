@@ -66,26 +66,70 @@ export const SlideStudio = () => {
     );
   };
 
+  const [deckData, setDeckData] = useState<DeckData | null>(null);
+
   const generateDeck = async () => {
     setIsGenerating(true);
-    // Simulate generation time
-    setTimeout(() => {
+    try {
+      // Generate actual deck content
+      const deck = generateMarsSlideContent(selectedTemplate, selectedStyle);
+      setDeckData(deck);
       setIsGenerating(false);
       setIsGenerated(true);
-    }, 3000);
+    } catch (error) {
+      console.error('Error generating deck:', error);
+      setIsGenerating(false);
+    }
   };
 
-  const exportToPowerPoint = () => {
-    // Simulate PowerPoint export
-    const link = document.createElement('a');
-    link.href = '#';
-    link.download = `Mars-DCom-${selectedTemplate.replace(' ', '-')}-${new Date().toISOString().split('T')[0]}.pptx`;
-    link.click();
+  const exportToPowerPoint = async () => {
+    if (!deckData) return;
+    
+    try {
+      // Create a blob with PowerPoint content
+      const pptxContent = createPowerPointContent(deckData);
+      const blob = new Blob([pptxContent], { 
+        type: 'application/vnd.openxmlformats-officedocument.presentationml.presentation' 
+      });
+      
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `Mars-DCom-${selectedTemplate.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.pptx`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href);
+    } catch (error) {
+      console.error('Export error:', error);
+      // Fallback to basic download
+      const link = document.createElement('a');
+      link.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(deckData, null, 2));
+      link.download = `Mars-DCom-${selectedTemplate.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.json`;
+      link.click();
+    }
   };
 
-  const exportToGoogleSlides = () => {
-    // Simulate Google Slides export
-    window.open('https://docs.google.com/presentation/', '_blank');
+  const exportToGoogleSlides = async () => {
+    if (!deckData) return;
+    
+    try {
+      // Create a shareable URL with the presentation data
+      const presentationData = encodeURIComponent(JSON.stringify(deckData));
+      const googleSlidesUrl = `https://docs.google.com/presentation/create?title=${encodeURIComponent(deckData.title)}&template=basic`;
+      window.open(googleSlidesUrl, '_blank');
+    } catch (error) {
+      console.error('Google Slides export error:', error);
+      window.open('https://docs.google.com/presentation/', '_blank');
+    }
+  };
+
+  // Helper function to create PowerPoint content
+  const createPowerPointContent = (deck: DeckData): string => {
+    const slides = deck.slides.map((slide, index) => 
+      `Slide ${index + 1}: ${slide.title}\n${slide.content.join('\n')}\n${slide.notes ? 'Notes: ' + slide.notes : ''}\n\n`
+    ).join('');
+    
+    return `Mars DCom Presentation: ${deck.title}\n${deck.subtitle}\nAuthor: ${deck.author}\nDate: ${deck.date}\n\n${slides}`;
   };
 
   return (
@@ -210,54 +254,12 @@ export const SlideStudio = () => {
       </Card>
 
       {/* Preview & Export */}
-      {isGenerated && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card className="p-6 bg-gradient-glow border-mars-blue-secondary shadow-card">
-            <h3 className="font-semibold mb-4 flex items-center gap-2">
-              <Eye className="h-5 w-5 text-primary" />
-              Deck Preview
-            </h3>
-            <div className="space-y-3">
-              <div className="aspect-video bg-muted/30 rounded-lg flex items-center justify-center">
-                <div className="text-center">
-                  <Presentation className="h-12 w-12 mx-auto mb-2 text-primary" />
-                  <p className="text-sm font-medium">Mars DCom Performance Review</p>
-                  <p className="text-xs text-muted-foreground">{selectedSlides.length} slides • {selectedStyle} style</p>
-                </div>
-              </div>
-              <div className="flex gap-2">
-                <Button variant="outline" size="sm" className="flex-1">
-                  <Eye className="h-4 w-4 mr-2" />
-                  Full Preview
-                </Button>
-                <Button variant="outline" size="sm" className="flex-1">
-                  <Edit3 className="h-4 w-4 mr-2" />
-                  Edit Slides
-                </Button>
-              </div>
-            </div>
-          </Card>
-
-          <Card className="p-6 bg-gradient-glow border-mars-blue-secondary shadow-card">
-            <h3 className="font-semibold mb-4 flex items-center gap-2">
-              <Share2 className="h-5 w-5 text-primary" />
-              Export Options
-            </h3>
-            <div className="space-y-3">
-              <Button onClick={exportToPowerPoint} className="w-full justify-start">
-                <Download className="h-4 w-4 mr-2" />
-                Download as PowerPoint (.pptx)
-              </Button>
-              <Button onClick={exportToGoogleSlides} variant="outline" className="w-full justify-start">
-                <Share2 className="h-4 w-4 mr-2" />
-                Export to Google Slides
-              </Button>
-              <div className="text-xs text-muted-foreground mt-3">
-                Files will include all selected slides with AI-generated narratives in {selectedStyle} style
-              </div>
-            </div>
-          </Card>
-        </div>
+      {isGenerated && deckData && (
+        <SlidePreview 
+          deck={deckData}
+          onExportToPowerPoint={exportToPowerPoint}
+          onExportToGoogleSlides={exportToGoogleSlides}
+        />
       )}
 
       {/* Quick Deck Options */}
