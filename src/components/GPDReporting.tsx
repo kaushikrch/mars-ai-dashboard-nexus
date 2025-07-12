@@ -229,17 +229,17 @@ export const GPDReporting = () => {
 
       {/* Detailed Views */}
       <Tabs value={selectedView} onValueChange={setSelectedView}>
-        <TabsList className="grid w-full grid-cols-4 bg-mars-blue-secondary text-primary-foreground">
-          <TabsTrigger value="overview" className="text-primary-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+        <TabsList className="grid w-full grid-cols-4 bg-mars-blue-secondary text-white">
+          <TabsTrigger value="overview" className="text-white data-[state=active]:bg-primary data-[state=active]:text-white">
             Overview
           </TabsTrigger>
-          <TabsTrigger value="retailers" className="text-primary-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+          <TabsTrigger value="retailers" className="text-white data-[state=active]:bg-primary data-[state=active]:text-white">
             Retailers
           </TabsTrigger>
-          <TabsTrigger value="brands" className="text-primary-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+          <TabsTrigger value="brands" className="text-white data-[state=active]:bg-primary data-[state=active]:text-white">
             Brands
           </TabsTrigger>
-          <TabsTrigger value="trends" className="text-primary-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+          <TabsTrigger value="trends" className="text-white data-[state=active]:bg-primary data-[state=active]:text-white">
             Trends
           </TabsTrigger>
         </TabsList>

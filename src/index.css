@@ -168,14 +168,4 @@ All colors MUST be HSL.
   ::selection {
     @apply bg-primary/30 text-foreground;
   }
-
-  /* Scrollbar hide utility */
-  .scrollbar-hide {
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
 }
