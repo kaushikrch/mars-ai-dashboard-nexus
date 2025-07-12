@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { MarsHeaderNav } from '@/components/MarsHeaderNav';
 import { OpenAIChat } from '@/components/OpenAIChat';
 import { ExecutiveSummary } from '@/components/ExecutiveSummary';
-import { PersonaInsights } from '@/components/PersonaInsights';
+import { PersonaWelcome } from '@/components/PersonaWelcome';
 import { ChannelDeepDive } from '@/components/ChannelDeepDive';
 import { SlideStudio } from '@/components/SlideStudio';
 import { PredictivePerformance } from '@/components/PredictivePerformance';
@@ -106,7 +106,7 @@ export const MarsDashboard = () => {
             </TabsContent>
 
             <TabsContent value="persona" className="space-y-6">
-              <PersonaInsights />
+              <PersonaWelcome />
             </TabsContent>
 
             <TabsContent value="channel" className="space-y-6">

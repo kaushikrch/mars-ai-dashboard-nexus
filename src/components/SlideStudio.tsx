@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { SlidePreview } from '@/components/SlidePreview';
 import { generateMarsSlideContent, DeckData } from '@/utils/slideGenerator';
+import PptxGenJS from 'pptxgenjs';
 import { Presentation, Download, Share2, Eye, Edit3, ArrowUpDown, FileText, Sparkles } from 'lucide-react';
 
 const slideTemplates = {
@@ -86,26 +87,80 @@ export const SlideStudio = () => {
     if (!deckData) return;
     
     try {
-      // Create a blob with PowerPoint content
-      const pptxContent = createPowerPointContent(deckData);
-      const blob = new Blob([pptxContent], { 
-        type: 'application/vnd.openxmlformats-officedocument.presentationml.presentation' 
-      });
+      const pptx = new PptxGenJS();
       
+      // Set slide master properties
+      pptx.defineLayout({ name: 'MARS_LAYOUT', width: 10, height: 5.625 });
+      pptx.layout = 'MARS_LAYOUT';
+      
+      // Title slide
+      const titleSlide = pptx.addSlide();
+      titleSlide.addText(deckData.title, {
+        x: 1, y: 1.5, w: 8, h: 1,
+        fontSize: 36, bold: true, color: '1f4788', align: 'center'
+      });
+      titleSlide.addText(deckData.subtitle, {
+        x: 1, y: 2.5, w: 8, h: 0.5,
+        fontSize: 18, color: '666666', align: 'center'
+      });
+      titleSlide.addText(`${deckData.author} | ${deckData.date}`, {
+        x: 1, y: 4.5, w: 8, h: 0.5,
+        fontSize: 14, color: '999999', align: 'center'
+      });
+
+      // Add content slides
+      deckData.slides.forEach((slide, index) => {
+        const contentSlide = pptx.addSlide();
+        
+        // Title
+        contentSlide.addText(slide.title, {
+          x: 0.5, y: 0.3, w: 9, h: 0.8,
+          fontSize: 24, bold: true, color: '1f4788'
+        });
+        
+        // Content bullets
+        slide.content.forEach((item, bulletIndex) => {
+          contentSlide.addText(`• ${item}`, {
+            x: 0.8, y: 1.5 + (bulletIndex * 0.5), w: 8.5, h: 0.4,
+            fontSize: 16, color: '333333'
+          });
+        });
+        
+        // Notes (if any)
+        if (slide.notes) {
+          contentSlide.addText(slide.notes, {
+            x: 0.8, y: 4.5, w: 8.5, h: 0.8,
+            fontSize: 12, color: '666666', italic: true
+          });
+        }
+        
+        // Mars branding
+        contentSlide.addText('M', {
+          x: 9.2, y: 0.1, w: 0.6, h: 0.6,
+          fontSize: 18, bold: true, color: 'FFFFFF',
+          fill: { color: 'f1c40f' }, align: 'center'
+        });
+        
+        // Slide number
+        contentSlide.addText(`${index + 1}`, {
+          x: 9.2, y: 5, w: 0.6, h: 0.3,
+          fontSize: 10, color: '999999', align: 'center'
+        });
+      });
+
+      // Save the presentation
+      await pptx.writeFile({ fileName: `Mars-DCom-${selectedTemplate.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.pptx` });
+      
+    } catch (error) {
+      console.error('PowerPoint export error:', error);
+      // Fallback to text download
+      const textContent = createPowerPointContent(deckData);
+      const blob = new Blob([textContent], { type: 'text/plain' });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
-      link.download = `Mars-DCom-${selectedTemplate.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.pptx`;
-      document.body.appendChild(link);
+      link.download = `Mars-DCom-${selectedTemplate.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.txt`;
       link.click();
-      document.body.removeChild(link);
       URL.revokeObjectURL(link.href);
-    } catch (error) {
-      console.error('Export error:', error);
-      // Fallback to basic download
-      const link = document.createElement('a');
-      link.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(deckData, null, 2));
-      link.download = `Mars-DCom-${selectedTemplate.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.json`;
-      link.click();
     }
   };
 
@@ -113,10 +168,23 @@ export const SlideStudio = () => {
     if (!deckData) return;
     
     try {
-      // Create a shareable URL with the presentation data
-      const presentationData = encodeURIComponent(JSON.stringify(deckData));
-      const googleSlidesUrl = `https://docs.google.com/presentation/create?title=${encodeURIComponent(deckData.title)}&template=basic`;
+      // Create presentation data in a format that can be imported
+      const slidesText = deckData.slides.map((slide, index) => 
+        `Slide ${index + 1}: ${slide.title}\n\n${slide.content.join('\n')}\n\n${slide.notes ? 'Speaker Notes: ' + slide.notes : ''}`
+      ).join('\n\n---\n\n');
+      
+      const fullContent = `${deckData.title}\n${deckData.subtitle}\n\nPresentation Content:\n\n${slidesText}`;
+      
+      // Copy to clipboard for easy paste into Google Slides
+      navigator.clipboard.writeText(fullContent);
+      
+      // Open Google Slides
+      const googleSlidesUrl = 'https://docs.google.com/presentation/create';
       window.open(googleSlidesUrl, '_blank');
+      
+      // Show instruction to user
+      alert('Presentation content copied to clipboard! Paste it into your new Google Slides presentation.');
+      
     } catch (error) {
       console.error('Google Slides export error:', error);
       window.open('https://docs.google.com/presentation/', '_blank');

@@ -144,32 +144,57 @@ export const PredictivePerformance = () => {
         </Card>
       </div>
 
-      {/* Drivers and Drainers */}
+      {/* Drivers and Drainers - Waterfall Chart */}
       <Card className="p-6 bg-gradient-glow border-mars-blue-secondary shadow-card">
         <h3 className="font-semibold mb-4 flex items-center gap-2">
           <Zap className="h-5 w-5 text-primary" />
-          Performance Drivers & Drainers
+          Performance Drivers & Drainers (Waterfall Analysis)
         </h3>
         
-        <ResponsiveContainer width="100%" height={250}>
-          <BarChart data={driversData} layout="horizontal">
-            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-            <XAxis type="number" stroke="hsl(var(--foreground))" />
-            <YAxis dataKey="category" type="category" stroke="hsl(var(--foreground))" width={120} />
-            <Tooltip 
-              contentStyle={{ 
-                backgroundColor: 'hsl(var(--card))', 
-                border: '1px solid hsl(var(--border))',
-                borderRadius: '8px'
-              }} 
-            />
-            <Bar 
-              dataKey="impact" 
-              fill="hsl(var(--primary))"
-              radius={[0, 4, 4, 0]}
-            />
-          </BarChart>
-        </ResponsiveContainer>
+        <div className="h-64 relative">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={driversData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+              <XAxis dataKey="category" stroke="hsl(var(--foreground))" angle={-45} textAnchor="end" height={100} />
+              <YAxis stroke="hsl(var(--foreground))" />
+              <Tooltip 
+                contentStyle={{ 
+                  backgroundColor: 'hsl(var(--card))', 
+                  border: '1px solid hsl(var(--border))',
+                  borderRadius: '8px'
+                }} 
+              />
+              <Bar dataKey="impact" radius={[4, 4, 0, 0]}>
+                {driversData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.impact > 0 ? 'hsl(var(--success))' : 'hsl(var(--danger))'} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+          
+          {/* Waterfall connecting lines */}
+          <svg className="absolute inset-0 pointer-events-none" style={{ zIndex: 10 }}>
+            {driversData.map((item, index) => {
+              if (index === driversData.length - 1) return null;
+              const x1 = 60 + (index * 120) + 40;
+              const x2 = 60 + ((index + 1) * 120) - 40;
+              const y = 120;
+              return (
+                <line
+                  key={index}
+                  x1={x1}
+                  y1={y}
+                  x2={x2}
+                  y2={y}
+                  stroke="hsl(var(--muted-foreground))"
+                  strokeWidth="2"
+                  strokeDasharray="5,5"
+                  opacity="0.6"
+                />
+              );
+            })}
+          </svg>
+        </div>
 
         <div className="grid grid-cols-2 gap-4 mt-4">
           <div>
