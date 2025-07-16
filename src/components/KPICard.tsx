@@ -37,7 +37,7 @@ export const KPICard = ({
   }[changeType];
 
   return (
-    <Card className={`p-6 bg-card border-border/50 shadow-card hover:shadow-glow transition-all duration-300 ${isAnimated ? 'animate-slide-up' : ''}`}>
+    <Card className={`p-6 bg-gradient-glow border-mars-blue-secondary shadow-card hover:shadow-glow transition-all duration-300 ${isAnimated ? 'animate-slide-up' : ''}`}>
       <div className="flex items-start justify-between">
         <div className="space-y-2">
           <p className="text-sm font-medium text-muted-foreground">{title}</p>

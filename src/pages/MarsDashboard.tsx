@@ -34,66 +34,66 @@ export const MarsDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background font-sans">
+    <div className="min-h-screen bg-background">
       <MarsHeaderNav />
       
       <div className={`transition-all duration-300 ${isChatCollapsed ? 'mr-0' : 'mr-[400px]'}`}>
         <main className="container mx-auto p-6">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
             <div className="overflow-x-auto">
-              <TabsList className="grid w-full grid-cols-8 bg-secondary border-border/50 min-w-[800px]">
+              <TabsList className="grid w-full grid-cols-8 bg-mars-blue-secondary min-w-[800px] text-primary-foreground">
                 <TabsTrigger 
                   value="executive" 
-                  className="flex items-center gap-2 text-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                  className="flex items-center gap-2 text-white data-[state=active]:bg-primary data-[state=active]:text-white"
                 >
                   <BarChart3 className="h-4 w-4" />
                   Executive
                 </TabsTrigger>
                 <TabsTrigger 
                   value="persona" 
-                  className="flex items-center gap-2 text-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                  className="flex items-center gap-2 text-white data-[state=active]:bg-primary data-[state=active]:text-white"
                 >
                   <Users className="h-4 w-4" />
                   Persona
                 </TabsTrigger>
                 <TabsTrigger 
                   value="channel" 
-                  className="flex items-center gap-2 text-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                  className="flex items-center gap-2 text-white data-[state=active]:bg-primary data-[state=active]:text-white"
                 >
                   <Search className="h-4 w-4" />
                   Channel
                 </TabsTrigger>
                 <TabsTrigger 
                   value="predictive" 
-                  className="flex items-center gap-2 text-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                  className="flex items-center gap-2 text-white data-[state=active]:bg-primary data-[state=active]:text-white"
                 >
                   <TrendingUp className="h-4 w-4" />
                   Predictive
                 </TabsTrigger>
                 <TabsTrigger 
                   value="insights" 
-                  className="flex items-center gap-2 text-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                  className="flex items-center gap-2 text-white data-[state=active]:bg-primary data-[state=active]:text-white"
                 >
                   <Brain className="h-4 w-4" />
                   AI Insights
                 </TabsTrigger>
                 <TabsTrigger 
                   value="slides" 
-                  className="flex items-center gap-2 text-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                  className="flex items-center gap-2 text-white data-[state=active]:bg-primary data-[state=active]:text-white"
                 >
                   <Presentation className="h-4 w-4" />
                   Slides
                 </TabsTrigger>
                 <TabsTrigger 
                   value="quality" 
-                  className="flex items-center gap-2 text-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                  className="flex items-center gap-2 text-white data-[state=active]:bg-primary data-[state=active]:text-white"
                 >
                   <Database className="h-4 w-4" />
                   Quality
                 </TabsTrigger>
                 <TabsTrigger 
                   value="builder" 
-                  className="flex items-center gap-2 text-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                  className="flex items-center gap-2 text-white data-[state=active]:bg-primary data-[state=active]:text-white"
                 >
                   <PlusCircle className="h-4 w-4" />
                   Builder

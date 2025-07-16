@@ -8,38 +8,38 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Mars Brand Colors - Light Theme */
-    --background: 255 255 255;
-    --foreground: 71 85 105;
+    /* Mars Brand Colors - Mars Blue Theme */
+    --background: 210 40% 98%;
+    --foreground: 215 40% 15%;
 
-    --card: 255 255 255;
-    --card-foreground: 71 85 105;
+    --card: 215 30% 96%;
+    --card-foreground: 215 40% 15%;
 
-    --popover: 255 255 255;
-    --popover-foreground: 71 85 105;
+    --popover: 215 30% 96%;
+    --popover-foreground: 215 40% 15%;
 
     --primary: 215 50% 35%;
-    --primary-foreground: 255 255 255;
+    --primary-foreground: 210 40% 98%;
 
-    --secondary: 241 245 249;
-    --secondary-foreground: 51 65 85;
+    --secondary: 215 30% 88%;
+    --secondary-foreground: 215 40% 15%;
 
-    --muted: 248 250 252;
-    --muted-foreground: 100 116 139;
+    --muted: 215 20% 92%;
+    --muted-foreground: 215 40% 25%;
 
     --accent: 45 100% 55%;
-    --accent-foreground: 71 85 105;
+    --accent-foreground: 215 40% 15%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 255 255 255;
+    --destructive-foreground: 210 40% 98%;
 
-    --border: 226 232 240;
-    --input: 241 245 249;
+    --border: 215 20% 80%;
+    --input: 215 20% 88%;
     --ring: 215 50% 35%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
-    /* Mars Custom Design Tokens - Light Theme */
+    /* Mars Custom Design Tokens */
     --mars-blue-deep: 215 50% 25%;
     --mars-blue-primary: 215 50% 35%;
     --mars-blue-secondary: 215 40% 45%;
@@ -48,26 +48,23 @@ All colors MUST be HSL.
     --mars-yellow-glow: 45 100% 65%;
     
     /* Performance Status Colors */
-    --success: 34 197 94;
-    --warning: 251 191 36;
-    --danger: 239 68 68;
+    --success: 142 76% 36%;
+    --warning: 38 92% 50%;
+    --danger: 0 84% 60%;
     
-    /* Gradients - Light Theme */
-    --gradient-mars: linear-gradient(135deg, hsl(215 50% 35%), hsl(215 40% 45%));
+    /* Gradients */
+    --gradient-mars: linear-gradient(135deg, hsl(215 50% 25%), hsl(215 50% 35%));
     --gradient-performance: linear-gradient(90deg, hsl(215 50% 35%), hsl(45 100% 55%));
-    --gradient-glow: linear-gradient(135deg, hsl(255 255 255), hsl(248 250 252));
+    --gradient-glow: linear-gradient(135deg, hsl(215 30% 96%), hsl(215 20% 92%));
     
-    /* Shadows - Light Theme */
-    --shadow-mars: 0 4px 20px -4px hsl(215 50% 35% / 0.15);
-    --shadow-glow: 0 0 20px hsl(215 50% 35% / 0.08);
-    --shadow-card: 0 2px 8px -2px hsl(215 50% 35% / 0.1);
+    /* Shadows */
+    --shadow-mars: 0 10px 30px -10px hsl(215 50% 25% / 0.3);
+    --shadow-glow: 0 0 40px hsl(215 50% 35% / 0.15);
+    --shadow-card: 0 8px 32px -8px hsl(215 50% 25% / 0.2);
     
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-
-    /* Font */
-    --font-custom: 'Inter', 'system-ui', sans-serif;
 
     --sidebar-background: 0 0% 98%;
 
@@ -87,33 +84,33 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 15 23 42;
-    --foreground: 248 250 252;
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
 
-    --card: 15 23 42;
-    --card-foreground: 248 250 252;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
 
-    --popover: 15 23 42;
-    --popover-foreground: 248 250 252;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
 
-    --primary: 248 250 252;
-    --primary-foreground: 15 23 42;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
 
-    --secondary: 30 41 59;
-    --secondary-foreground: 248 250 252;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 30 41 59;
-    --muted-foreground: 148 163 184;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 30 41 59;
-    --accent-foreground: 248 250 252;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
 
-    --destructive: 220 38 38;
-    --destructive-foreground: 248 250 252;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
 
-    --border: 30 41 59;
-    --input: 30 41 59;
-    --ring: 148 163 184;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -132,12 +129,11 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
-    font-family: var(--font-custom), 'Inter', 'system-ui', sans-serif;
   }
 
-  /* Custom Component Styles - Light Theme */
+  /* Custom Component Styles */
   .mars-card-hover {
-    @apply hover:shadow-glow hover:scale-[1.02] transition-all duration-300;
+    @apply hover:shadow-glow hover:scale-105 transition-all duration-300;
   }
 
   .mars-glow {
@@ -151,25 +147,25 @@ All colors MUST be HSL.
     animation: shimmer 2s linear infinite;
   }
 
-  /* Scrollbar Styling - Light Theme */
+  /* Scrollbar Styling */
   ::-webkit-scrollbar {
-    width: 6px;
+    width: 8px;
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-muted;
+    @apply bg-mars-blue-secondary;
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-border rounded-full;
+    @apply bg-primary rounded-full;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-primary/20;
+    @apply bg-primary/80;
   }
 
-  /* Selection Styling - Light Theme */
+  /* Selection Styling */
   ::selection {
-    @apply bg-primary/20 text-foreground;
+    @apply bg-primary/30 text-foreground;
   }
 }
