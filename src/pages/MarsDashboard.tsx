@@ -15,6 +15,7 @@ import { ChartBuilder } from '@/components/ChartBuilder';
 
 export const MarsDashboard = () => {
   const [isChatCollapsed, setIsChatCollapsed] = useState(false);
+  const [isNavCollapsed, setIsNavCollapsed] = useState(false);
   const [activeTab, setActiveTab] = useState('executive');
   const [isLoading, setIsLoading] = useState(true);
 
@@ -38,7 +39,17 @@ export const MarsDashboard = () => {
       <MarsHeaderNav />
       
       <div className="flex">
-        <main className="flex-1 p-6">
+        <OpenAIChat
+          isCollapsed={isChatCollapsed}
+          onToggle={() => setIsChatCollapsed(!isChatCollapsed)}
+          currentContext={tabContextMap[activeTab]}
+        />
+        
+        <main className={`flex-1 p-6 transition-all duration-300 ${
+          isChatCollapsed ? 'ml-0' : 'ml-[416px]'
+        } ${
+          isNavCollapsed ? 'mr-0' : 'mr-[288px]'
+        }`}>
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
             <TabsContent value="executive" className="space-y-6">
               <ExecutiveSummary />
@@ -74,18 +85,12 @@ export const MarsDashboard = () => {
           </Tabs>
         </main>
 
-        <div className="flex">
-          <MarsNavigation 
-            activeTab={activeTab} 
-            onTabChange={setActiveTab}
-          />
-          
-          <OpenAIChat
-            isCollapsed={isChatCollapsed}
-            onToggle={() => setIsChatCollapsed(!isChatCollapsed)}
-            currentContext={tabContextMap[activeTab]}
-          />
-        </div>
+        <MarsNavigation 
+          activeTab={activeTab} 
+          onTabChange={setActiveTab}
+          isCollapsed={isNavCollapsed}
+          onToggle={() => setIsNavCollapsed(!isNavCollapsed)}
+        />
       </div>
     </div>
   );

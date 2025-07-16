@@ -1,9 +1,11 @@
-import { BarChart3, Users, Search, Presentation, TrendingUp, Brain, Database, PlusCircle } from 'lucide-react';
+import { BarChart3, Users, Search, Presentation, TrendingUp, Brain, Database, PlusCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface MarsNavigationProps {
   activeTab: string;
   onTabChange: (tab: string) => void;
+  isCollapsed: boolean;
+  onToggle: () => void;
 }
 
 const navigationItems = [
@@ -57,42 +59,57 @@ const navigationItems = [
   }
 ];
 
-export const MarsNavigation = ({ activeTab, onTabChange }: MarsNavigationProps) => {
+export const MarsNavigation = ({ activeTab, onTabChange, isCollapsed, onToggle }: MarsNavigationProps) => {
   return (
-    <div className="w-72 bg-muted/30 border-l border-border min-h-screen p-4 space-y-1">
-      <h2 className="text-sm font-semibold text-muted-foreground mb-4 px-3">Navigation</h2>
-      
-      {navigationItems.map((item) => {
-        const Icon = item.icon;
-        const isActive = activeTab === item.id;
-        
-        return (
+    <div className={`${isCollapsed ? 'w-16' : 'w-72'} bg-muted/30 border-l border-border min-h-screen transition-all duration-300`}>
+      <div className="p-4 space-y-1">
+        <div className="flex items-center justify-between mb-4">
+          {!isCollapsed && <h2 className="text-sm font-semibold text-muted-foreground px-3">Navigation</h2>}
           <Button
-            key={item.id}
-            variant={isActive ? "default" : "ghost"}
-            className={`w-full justify-start h-auto p-3 ${
-              isActive 
-                ? "bg-primary text-primary-foreground shadow-sm" 
-                : "hover:bg-muted"
-            }`}
-            onClick={() => onTabChange(item.id)}
+            variant="ghost"
+            size="sm"
+            onClick={onToggle}
+            className="h-8 w-8 p-0"
           >
-            <div className="flex items-center gap-3 w-full">
-              <Icon className="h-4 w-4 shrink-0" />
-              <div className="flex flex-col items-start text-left">
-                <span className="text-sm font-medium">{item.label}</span>
-                <span className={`text-xs ${
-                  isActive 
-                    ? "text-primary-foreground/70" 
-                    : "text-muted-foreground"
-                }`}>
-                  {item.description}
-                </span>
-              </div>
-            </div>
+            {isCollapsed ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
           </Button>
-        );
-      })}
+        </div>
+        
+        {navigationItems.map((item) => {
+          const Icon = item.icon;
+          const isActive = activeTab === item.id;
+          
+          return (
+            <Button
+              key={item.id}
+              variant={isActive ? "default" : "ghost"}
+              className={`w-full ${isCollapsed ? 'justify-center p-2' : 'justify-start p-3'} h-auto ${
+                isActive 
+                  ? "bg-primary text-primary-foreground shadow-sm" 
+                  : "hover:bg-muted"
+              }`}
+              onClick={() => onTabChange(item.id)}
+              title={isCollapsed ? item.label : undefined}
+            >
+              <div className={`flex items-center gap-3 ${isCollapsed ? 'justify-center' : 'w-full'}`}>
+                <Icon className="h-4 w-4 shrink-0" />
+                {!isCollapsed && (
+                  <div className="flex flex-col items-start text-left">
+                    <span className="text-sm font-medium">{item.label}</span>
+                    <span className={`text-xs ${
+                      isActive 
+                        ? "text-primary-foreground/70" 
+                        : "text-muted-foreground"
+                    }`}>
+                      {item.description}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </Button>
+          );
+        })}
+      </div>
     </div>
   );
 };

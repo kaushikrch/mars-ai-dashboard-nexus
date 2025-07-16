@@ -221,7 +221,7 @@ Provide actionable insights in a professional but accessible tone. Use data from
 
   if (isCollapsed) {
     return (
-      <div className="fixed right-4 bottom-4 z-50">
+      <div className="fixed left-4 bottom-4 z-50">
         <Button
           onClick={onToggle}
           className="rounded-full w-14 h-14 bg-primary hover:bg-primary/90 shadow-glow animate-pulse-glow"
@@ -233,7 +233,7 @@ Provide actionable insights in a professional but accessible tone. Use data from
   }
 
   return (
-    <Card className="fixed right-4 top-4 bottom-4 w-96 z-40 bg-card border-mars-blue-secondary shadow-mars flex flex-col">
+    <Card className="fixed left-4 top-4 bottom-4 w-96 z-40 bg-card border-mars-blue-secondary shadow-mars flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-mars-blue-secondary">
         <div className="flex items-center gap-2">
