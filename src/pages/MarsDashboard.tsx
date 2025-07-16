@@ -15,7 +15,7 @@ import { ChartBuilder } from '@/components/ChartBuilder';
 
 export const MarsDashboard = () => {
   const [isChatCollapsed, setIsChatCollapsed] = useState(false);
-  const [isNavCollapsed, setIsNavCollapsed] = useState(false);
+  const [isNavCollapsed, setIsNavCollapsed] = useState(true);
   const [activeTab, setActiveTab] = useState('executive');
   const [isLoading, setIsLoading] = useState(true);
 
@@ -85,13 +85,25 @@ export const MarsDashboard = () => {
           </Tabs>
         </main>
 
+        {!isNavCollapsed && (
+          <MarsNavigation 
+            activeTab={activeTab} 
+            onTabChange={setActiveTab}
+            isCollapsed={isNavCollapsed}
+            onToggle={() => setIsNavCollapsed(!isNavCollapsed)}
+          />
+        )}
+      </div>
+      
+      {/* Navigation toggle when collapsed */}
+      {isNavCollapsed && (
         <MarsNavigation 
           activeTab={activeTab} 
           onTabChange={setActiveTab}
           isCollapsed={isNavCollapsed}
           onToggle={() => setIsNavCollapsed(!isNavCollapsed)}
         />
-      </div>
+      )}
     </div>
   );
 };

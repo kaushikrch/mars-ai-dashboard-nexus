@@ -60,18 +60,31 @@ const navigationItems = [
 ];
 
 export const MarsNavigation = ({ activeTab, onTabChange, isCollapsed, onToggle }: MarsNavigationProps) => {
+  if (isCollapsed) {
+    return (
+      <div className="fixed right-4 top-4 z-50">
+        <Button
+          onClick={onToggle}
+          className="rounded-full w-12 h-12 bg-muted hover:bg-muted/80 border shadow-lg"
+        >
+          <ChevronLeft className="h-5 w-5" />
+        </Button>
+      </div>
+    );
+  }
+
   return (
-    <div className={`${isCollapsed ? 'w-16' : 'w-72'} bg-muted/30 border-l border-border min-h-screen transition-all duration-300`}>
+    <div className="w-72 bg-muted/30 border-l border-border min-h-screen transition-all duration-300">
       <div className="p-4 space-y-1">
         <div className="flex items-center justify-between mb-4">
-          {!isCollapsed && <h2 className="text-sm font-semibold text-muted-foreground px-3">Navigation</h2>}
+          <h2 className="text-sm font-semibold text-muted-foreground px-3">Navigation</h2>
           <Button
             variant="ghost"
             size="sm"
             onClick={onToggle}
             className="h-8 w-8 p-0"
           >
-            {isCollapsed ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+            <ChevronRight className="h-4 w-4" />
           </Button>
         </div>
         
@@ -83,28 +96,25 @@ export const MarsNavigation = ({ activeTab, onTabChange, isCollapsed, onToggle }
             <Button
               key={item.id}
               variant={isActive ? "default" : "ghost"}
-              className={`w-full ${isCollapsed ? 'justify-center p-2' : 'justify-start p-3'} h-auto ${
+              className={`w-full justify-start p-3 h-auto ${
                 isActive 
                   ? "bg-primary text-primary-foreground shadow-sm" 
                   : "hover:bg-muted"
               }`}
               onClick={() => onTabChange(item.id)}
-              title={isCollapsed ? item.label : undefined}
             >
-              <div className={`flex items-center gap-3 ${isCollapsed ? 'justify-center' : 'w-full'}`}>
+              <div className="flex items-center gap-3 w-full">
                 <Icon className="h-4 w-4 shrink-0" />
-                {!isCollapsed && (
-                  <div className="flex flex-col items-start text-left">
-                    <span className="text-sm font-medium">{item.label}</span>
-                    <span className={`text-xs ${
-                      isActive 
-                        ? "text-primary-foreground/70" 
-                        : "text-muted-foreground"
-                    }`}>
-                      {item.description}
-                    </span>
-                  </div>
-                )}
+                <div className="flex flex-col items-start text-left">
+                  <span className="text-sm font-medium">{item.label}</span>
+                  <span className={`text-xs ${
+                    isActive 
+                      ? "text-primary-foreground/70" 
+                      : "text-muted-foreground"
+                  }`}>
+                    {item.description}
+                  </span>
+                </div>
               </div>
             </Button>
           );
