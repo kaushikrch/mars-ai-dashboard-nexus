@@ -48,13 +48,16 @@ export const MarsHeaderNav = () => {
     fileInputRef.current?.click();
   };
   return (
-    <header className="sticky top-0 z-30 border-b border-mars-blue-secondary bg-background/95 backdrop-blur-sm">
+    <header className="sticky top-0 z-30 border-b border-border bg-white backdrop-blur-sm shadow-sm">
       <div className="flex h-16 items-center justify-between px-6">
         {/* Logo & Title */}
         <div className="flex items-center gap-4">
-          <div className="flex flex-col items-center">
-            <MarsLogo className="h-10 w-auto" />
-            <p className="text-xs text-muted-foreground mt-1">DCom Intelligence Performance Dashboard</p>
+          <div className="flex items-center gap-3">
+            <MarsLogo className="h-12 w-auto" />
+            <div className="flex flex-col">
+              <p className="text-sm font-medium text-foreground">DCom Intelligence</p>
+              <p className="text-xs text-muted-foreground">Performance Dashboard</p>
+            </div>
           </div>
         </div>
 
@@ -94,7 +97,7 @@ export const MarsHeaderNav = () => {
             <Settings className="h-4 w-4" />
           </MarsButton>
 
-          <div className="flex items-center gap-2 pl-2 border-l border-mars-blue-secondary">
+          <div className="flex items-center gap-2 pl-2 border-l border-border">
             <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
               <User className="h-4 w-4 text-primary-foreground" />
             </div>
