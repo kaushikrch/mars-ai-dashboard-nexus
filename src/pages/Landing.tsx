@@ -272,44 +272,6 @@ const Landing = () => {
           </div>
         </div>
       </section>
-
-      {/* CTA Section */}
-      <section className="py-20">
-        <div style={{ margin: 'var(--container-margin)' }}>
-          <div className="text-center">
-            <h2 className="text-4xl font-bold mb-4 text-foreground">
-              Ready to Transform Your Marketing?
-            </h2>
-            <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Join thousands of marketers who trust Mars Dashboard for their analytics and reporting needs
-            </p>
-            
-            <div className="flex justify-center">
-              <button 
-                className="floating-buttons_root__cgDUn text-lg px-12 py-6"
-                onClick={handleGetStarted}
-              >
-                Start Your Free Trial <ArrowRight className="w-5 h-5 ml-2" />
-              </button>
-            </div>
-            
-            <div className="flex justify-center gap-8 mt-8 text-sm text-muted-foreground">
-              <div className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-success" />
-                <span>14-day free trial</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-success" />
-                <span>No setup fees</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-success" />
-                <span>Cancel anytime</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
     </div>
   );
 };

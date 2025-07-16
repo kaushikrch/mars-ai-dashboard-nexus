@@ -7,11 +7,11 @@ const marsButtonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary hover:bg-primary/90 text-primary-foreground shadow-glow hover:shadow-mars",
-        hero: "bg-gradient-performance text-primary-foreground hover:scale-105 animate-pulse-glow shadow-glow",
-        ghost: "hover:bg-mars-blue-secondary/50 text-foreground",
-        outline: "border-primary text-primary hover:bg-primary/10",
-        mars: "bg-mars-blue-secondary hover:bg-mars-blue-secondary/90 text-foreground border border-mars-blue-secondary",
+        default: "bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm hover:shadow-glow",
+        hero: "bg-gradient-performance text-primary-foreground hover:scale-105 shadow-glow",
+        ghost: "hover:bg-secondary/80 text-foreground",
+        outline: "border-border text-primary hover:bg-primary/5",
+        mars: "bg-secondary hover:bg-secondary/80 text-foreground border border-border/50",
       },
     },
     defaultVariants: {
