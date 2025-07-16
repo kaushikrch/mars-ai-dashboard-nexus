@@ -49,7 +49,7 @@ export const LoadingScreen = ({ onComplete }: { onComplete: () => void }) => {
           <img 
             src="/lovable-uploads/9b606a20-8647-456c-aed4-cb342066e1b6.png" 
             alt="Mars Logo" 
-            className="h-20 w-20 mx-auto animate-pulse-glow object-contain"
+            className="h-20 w-20 mx-auto object-contain"
           />
         </div>
         
