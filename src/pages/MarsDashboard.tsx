@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { LoadingScreen } from '@/components/LoadingScreen';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { MarsHeaderNav } from '@/components/MarsHeaderNav';
+import { MarsNavigation } from '@/components/MarsNavigation';
 import { OpenAIChat } from '@/components/OpenAIChat';
 import { ExecutiveSummary } from '@/components/ExecutiveSummary';
 import { PersonaWelcome } from '@/components/PersonaWelcome';
@@ -11,7 +12,6 @@ import { PredictivePerformance } from '@/components/PredictivePerformance';
 import { AIInsights } from '@/components/AIInsights';
 import { DataQuality } from '@/components/DataQuality';
 import { ChartBuilder } from '@/components/ChartBuilder';
-import { BarChart3, Users, Search, Presentation, TrendingUp, Brain, Database, PlusCircle } from 'lucide-react';
 
 export const MarsDashboard = () => {
   const [isChatCollapsed, setIsChatCollapsed] = useState(false);
@@ -37,70 +37,9 @@ export const MarsDashboard = () => {
     <div className="min-h-screen bg-white">
       <MarsHeaderNav />
       
-      <div className={`transition-all duration-300 ${isChatCollapsed ? 'mr-0' : 'mr-[400px]'}`}>
-        <main className="container mx-auto p-6">
+      <div className="flex">
+        <main className="flex-1 p-6">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-            <div className="overflow-x-auto">
-              <TabsList className="grid w-full grid-cols-8 bg-muted border min-w-[800px]">
-                <TabsTrigger 
-                  value="executive" 
-                  className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-white"
-                >
-                  <BarChart3 className="h-4 w-4" />
-                  Executive
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="persona" 
-                  className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-white"
-                >
-                  <Users className="h-4 w-4" />
-                  Persona
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="channel" 
-                  className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-white"
-                >
-                  <Search className="h-4 w-4" />
-                  Channel
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="predictive" 
-                  className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-white"
-                >
-                  <TrendingUp className="h-4 w-4" />
-                  Predictive
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="insights" 
-                  className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-white"
-                >
-                  <Brain className="h-4 w-4" />
-                  AI Insights
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="slides" 
-                  className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-white"
-                >
-                  <Presentation className="h-4 w-4" />
-                  Slides
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="quality" 
-                  className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-white"
-                >
-                  <Database className="h-4 w-4" />
-                  Quality
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="builder" 
-                  className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-white"
-                >
-                  <PlusCircle className="h-4 w-4" />
-                  Builder
-                </TabsTrigger>
-              </TabsList>
-            </div>
-
             <TabsContent value="executive" className="space-y-6">
               <ExecutiveSummary />
             </TabsContent>
@@ -132,16 +71,22 @@ export const MarsDashboard = () => {
             <TabsContent value="builder" className="space-y-6">
               <ChartBuilder />
             </TabsContent>
-
           </Tabs>
         </main>
-      </div>
 
-      <OpenAIChat
-        isCollapsed={isChatCollapsed}
-        onToggle={() => setIsChatCollapsed(!isChatCollapsed)}
-        currentContext={tabContextMap[activeTab]}
-      />
+        <div className="flex">
+          <MarsNavigation 
+            activeTab={activeTab} 
+            onTabChange={setActiveTab}
+          />
+          
+          <OpenAIChat
+            isCollapsed={isChatCollapsed}
+            onToggle={() => setIsChatCollapsed(!isChatCollapsed)}
+            currentContext={tabContextMap[activeTab]}
+          />
+        </div>
+      </div>
     </div>
   );
 };
