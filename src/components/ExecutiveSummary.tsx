@@ -124,9 +124,9 @@ export const ExecutiveSummary = () => {
 
       {/* Search Strategy Impact */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card className="p-6 bg-gradient-performance border-mars-blue-secondary shadow-card">
-          <h3 className="text-lg font-semibold mb-4 text-primary-foreground">Search Strategy Impact</h3>
-          <div className="space-y-3 text-primary-foreground">
+        <Card className="p-6 bg-gradient-glow border-mars-blue-secondary shadow-card">
+          <h3 className="text-lg font-semibold mb-4">Search Strategy Impact</h3>
+          <div className="space-y-3">
             <div className="flex justify-between">
               <span>PDP Traffic</span>
               <span className="font-bold">+18% QoQ</span>
