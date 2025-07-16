@@ -169,7 +169,7 @@ export const ChannelDeepDive = () => {
             <Zap className="h-5 w-5" />
             AI Optimization Insights
           </h4>
-          <div className="space-y-3 text-primary-foreground">
+          <div className="space-y-3">
             <div className="flex items-center gap-2">
               <TrendingUp className="h-4 w-4" />
               <p className="text-sm">Skittles microseason strategy driving 67% of incremental growth</p>
