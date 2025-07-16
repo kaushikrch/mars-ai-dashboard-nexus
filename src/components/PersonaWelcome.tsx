@@ -108,8 +108,8 @@ export const PersonaWelcome = () => {
     return (
       <div className="space-y-6 animate-slide-up">
         {/* Header */}
-        <Card className="p-6 bg-gradient-performance border-mars-blue-secondary shadow-card">
-          <div className="flex items-center gap-4 text-primary-foreground">
+        <Card className="p-6 bg-gradient-glow border-mars-blue-secondary shadow-card">
+          <div className="flex items-center gap-4">
             <User className="h-8 w-8" />
             <div>
               <h2 className="text-xl font-bold">Choose Your Persona</h2>
@@ -173,9 +173,9 @@ export const PersonaWelcome = () => {
   return (
     <div className="space-y-6 animate-slide-up">
       {/* Header with Back Button */}
-      <Card className="p-6 bg-gradient-performance border-mars-blue-secondary shadow-card">
+      <Card className="p-6 bg-gradient-glow border-mars-blue-secondary shadow-card">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4 text-primary-foreground">
+          <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}>
               <persona.icon className="h-6 w-6" />
             </div>

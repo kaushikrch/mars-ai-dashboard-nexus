@@ -83,8 +83,8 @@ export const GPDReporting = () => {
   return (
     <div className="space-y-6 animate-slide-up">
       {/* Header */}
-      <Card className="p-6 bg-gradient-performance border-mars-blue-secondary shadow-card">
-        <div className="flex items-center justify-between text-primary-foreground">
+      <Card className="p-6 bg-gradient-glow border-mars-blue-secondary shadow-card">
+        <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <FileSpreadsheet className="h-8 w-8" />
             <div>

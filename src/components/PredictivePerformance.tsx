@@ -46,8 +46,8 @@ export const PredictivePerformance = () => {
   return (
     <div className="space-y-6 animate-slide-up">
       {/* Header */}
-      <Card className="p-6 bg-gradient-performance border-mars-blue-secondary shadow-card">
-        <div className="flex items-center gap-4 text-primary-foreground">
+      <Card className="p-6 bg-gradient-glow border-mars-blue-secondary shadow-card">
+        <div className="flex items-center gap-4">
           <TrendingUp className="h-8 w-8" />
           <div>
             <h2 className="text-xl font-bold">Predictive Performance Intelligence</h2>

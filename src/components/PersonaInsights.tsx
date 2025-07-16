@@ -103,8 +103,8 @@ export const PersonaInsights = () => {
       </Card>
 
       {/* Persona Header */}
-      <Card className="p-6 bg-gradient-performance border-mars-blue-secondary shadow-card">
-        <div className="flex items-center gap-4 text-primary-foreground">
+      <Card className="p-6 bg-gradient-glow border-mars-blue-secondary shadow-card">
+        <div className="flex items-center gap-4">
           <IconComponent className="h-8 w-8" />
           <div>
             <h3 className="text-xl font-bold">{persona.title}</h3>

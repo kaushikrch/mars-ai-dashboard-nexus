@@ -164,8 +164,8 @@ export const ChannelDeepDive = () => {
 
       {/* AI Optimization Insights */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="p-6 bg-gradient-performance border-mars-blue-secondary shadow-card">
-          <h4 className="font-semibold mb-4 text-primary-foreground flex items-center gap-2">
+        <Card className="p-6 bg-gradient-glow border-mars-blue-secondary shadow-card">
+          <h4 className="font-semibold mb-4 flex items-center gap-2">
             <Zap className="h-5 w-5" />
             AI Optimization Insights
           </h4>

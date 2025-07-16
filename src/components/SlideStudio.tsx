@@ -203,8 +203,8 @@ export const SlideStudio = () => {
   return (
     <div className="space-y-6 animate-slide-up">
       {/* Header */}
-      <Card className="p-6 bg-gradient-performance border-mars-blue-secondary shadow-card">
-        <div className="flex items-center gap-4 text-primary-foreground">
+      <Card className="p-6 bg-gradient-glow border-mars-blue-secondary shadow-card">
+        <div className="flex items-center gap-4">
           <Presentation className="h-8 w-8" />
           <div>
             <h2 className="text-xl font-bold">Slide Studio + Export Manager</h2>
