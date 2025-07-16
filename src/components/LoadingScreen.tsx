@@ -43,10 +43,14 @@ export const LoadingScreen = ({ onComplete }: { onComplete: () => void }) => {
   }, [onComplete]);
 
   return (
-    <div className="fixed inset-0 bg-background flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-white flex items-center justify-center z-50">
       <div className="text-center space-y-8 max-w-md">
         <div className="animate-float">
-          <MarsLogo className="h-20 w-20 mx-auto animate-pulse-glow" />
+          <img 
+            src="/lovable-uploads/9b606a20-8647-456c-aed4-cb342066e1b6.png" 
+            alt="Mars Logo" 
+            className="h-20 w-20 mx-auto animate-pulse-glow object-contain"
+          />
         </div>
         
         <div className="space-y-4">
