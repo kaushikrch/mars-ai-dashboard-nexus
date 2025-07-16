@@ -52,10 +52,9 @@ export const MarsHeaderNav = () => {
       <div className="flex h-16 items-center justify-between px-6">
         {/* Logo & Title */}
         <div className="flex items-center gap-4">
-          <MarsLogo className="h-10 w-10" />
-          <div>
-            <h1 className="text-xl font-bold">Mars DCom Intelligence</h1>
-            <p className="text-xs text-muted-foreground">Performance Dashboard</p>
+          <div className="flex flex-col items-center">
+            <MarsLogo className="h-10 w-auto" />
+            <p className="text-xs text-muted-foreground mt-1">DCom Intelligence Performance Dashboard</p>
           </div>
         </div>
 
