@@ -62,19 +62,19 @@ const navigationItems = [
 export const MarsNavigation = ({ activeTab, onTabChange, isCollapsed, onToggle }: MarsNavigationProps) => {
   if (isCollapsed) {
     return (
-      <div className="fixed right-4 top-4 z-50">
+      <div className="fixed left-4 top-4 z-50">
         <Button
           onClick={onToggle}
           className="rounded-full w-12 h-12 bg-muted hover:bg-muted/80 border shadow-lg"
         >
-          <ChevronLeft className="h-5 w-5" />
+          <ChevronRight className="h-5 w-5" />
         </Button>
       </div>
     );
   }
 
   return (
-    <div className="w-72 bg-muted/30 border-l border-border min-h-screen transition-all duration-300">
+    <div className="w-72 bg-muted/30 border-r border-border min-h-screen transition-all duration-300">
       <div className="p-4 space-y-1">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-sm font-semibold text-muted-foreground px-3">Navigation</h2>
@@ -84,7 +84,7 @@ export const MarsNavigation = ({ activeTab, onTabChange, isCollapsed, onToggle }
             onClick={onToggle}
             className="h-8 w-8 p-0"
           >
-            <ChevronRight className="h-4 w-4" />
+            <ChevronLeft className="h-4 w-4" />
           </Button>
         </div>
         

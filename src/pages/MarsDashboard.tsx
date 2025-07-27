@@ -39,16 +39,19 @@ export const MarsDashboard = () => {
       <MarsHeaderNav />
       
       <div className="flex">
-        <OpenAIChat
-          isCollapsed={isChatCollapsed}
-          onToggle={() => setIsChatCollapsed(!isChatCollapsed)}
-          currentContext={tabContextMap[activeTab]}
-        />
+        {!isNavCollapsed && (
+          <MarsNavigation 
+            activeTab={activeTab} 
+            onTabChange={setActiveTab}
+            isCollapsed={isNavCollapsed}
+            onToggle={() => setIsNavCollapsed(!isNavCollapsed)}
+          />
+        )}
         
         <main className={`flex-1 p-6 transition-all duration-300 ${
-          isChatCollapsed ? 'ml-0' : 'ml-[416px]'
+          isNavCollapsed ? 'ml-0' : 'ml-[288px]'
         } ${
-          isNavCollapsed ? 'mr-0' : 'mr-[288px]'
+          isChatCollapsed ? 'mr-0' : 'mr-[416px]'
         }`}>
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
             <TabsContent value="executive" className="space-y-6">
@@ -85,14 +88,11 @@ export const MarsDashboard = () => {
           </Tabs>
         </main>
 
-        {!isNavCollapsed && (
-          <MarsNavigation 
-            activeTab={activeTab} 
-            onTabChange={setActiveTab}
-            isCollapsed={isNavCollapsed}
-            onToggle={() => setIsNavCollapsed(!isNavCollapsed)}
-          />
-        )}
+        <OpenAIChat
+          isCollapsed={isChatCollapsed}
+          onToggle={() => setIsChatCollapsed(!isChatCollapsed)}
+          currentContext={tabContextMap[activeTab]}
+        />
       </div>
       
       {/* Navigation toggle when collapsed */}
