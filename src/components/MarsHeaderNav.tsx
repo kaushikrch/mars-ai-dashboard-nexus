@@ -48,7 +48,7 @@ export const MarsHeaderNav = () => {
     fileInputRef.current?.click();
   };
   return (
-    <header className="sticky top-0 z-30 border-b border-border bg-white backdrop-blur-sm shadow-sm">
+    <header className="sticky top-0 z-30 border-b border-border bg-background backdrop-blur-sm shadow-sm">
       <div className="flex h-16 items-center justify-between px-6">
         {/* Logo & Title */}
         <div className="flex items-center gap-4">

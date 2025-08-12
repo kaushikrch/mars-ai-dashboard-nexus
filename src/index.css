@@ -18,7 +18,7 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 215 40% 15%;
 
-    --primary: 215 50% 35%;
+    --primary: 240 100% 31%;
     --primary-foreground: 210 40% 98%;
 
     --secondary: 215 30% 88%;
@@ -27,7 +27,7 @@ All colors MUST be HSL.
     --muted: 215 20% 92%;
     --muted-foreground: 215 40% 25%;
 
-    --accent: 45 100% 55%;
+    --accent: 20 100% 50%;
     --accent-foreground: 215 40% 15%;
 
     --destructive: 0 84% 60%;
@@ -40,27 +40,27 @@ All colors MUST be HSL.
     --radius: 0.75rem;
 
     /* Mars Custom Design Tokens */
-    --mars-blue-deep: 215 50% 25%;
-    --mars-blue-primary: 215 50% 35%;
-    --mars-blue-secondary: 215 40% 45%;
-    --mars-blue-light: 215 30% 60%;
-    --mars-yellow: 45 100% 55%;
-    --mars-yellow-glow: 45 100% 65%;
+    --mars-blue-deep: 240 100% 20%;
+    --mars-blue-primary: 240 100% 31%;
+    --mars-blue-secondary: 240 60% 45%;
+    --mars-blue-light: 240 40% 70%;
+    --mars-yellow: 20 100% 50%;
+    --mars-yellow-glow: 20 100% 60%;
     
     /* Performance Status Colors */
-    --success: 142 76% 36%;
-    --warning: 38 92% 50%;
+    --success: 90 38% 52%;
+    --warning: 46 83% 62%;
     --danger: 0 84% 60%;
     
     /* Gradients */
-    --gradient-mars: linear-gradient(135deg, hsl(215 50% 25%), hsl(215 50% 35%));
-    --gradient-performance: linear-gradient(90deg, hsl(215 50% 35%), hsl(45 100% 55%));
+    --gradient-mars: linear-gradient(135deg, hsl(var(--mars-blue-deep)), hsl(var(--primary)));
+    --gradient-performance: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)));
     --gradient-glow: linear-gradient(135deg, hsl(0 0% 100%), hsl(0 0% 98%));
     
     /* Shadows */
-    --shadow-mars: 0 10px 30px -10px hsl(215 50% 25% / 0.3);
-    --shadow-glow: 0 0 40px hsl(215 50% 35% / 0.15);
-    --shadow-card: 0 8px 32px -8px hsl(215 50% 25% / 0.2);
+    --shadow-mars: 0 10px 30px -10px hsl(var(--mars-blue-deep) / 0.3);
+    --shadow-glow: 0 0 40px hsl(var(--primary) / 0.2);
+    --shadow-card: 0 8px 32px -8px hsl(var(--mars-blue-deep) / 0.15);
     
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -129,7 +129,7 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Nunito Sans', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji';
+    font-family: 'Mars Centra', 'Nunito Sans', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji';
   }
 
   /* Custom Component Styles */
