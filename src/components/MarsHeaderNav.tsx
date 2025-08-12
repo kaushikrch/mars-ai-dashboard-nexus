@@ -85,16 +85,16 @@ export const MarsHeaderNav = () => {
             onClick={triggerFileUpload}
             disabled={isUploading}
           >
-            <Upload className={`h-4 w-4 mr-2 ${isUploading ? 'animate-spin' : ''}`} />
+            <Upload className={`h-4 w-4 mr-2 text-primary ${isUploading ? 'animate-spin' : ''}`} />
             {isUploading ? 'Processing...' : 'Upload Data'}
           </MarsButton>
 
           <MarsButton variant="ghost" size="sm">
-            <Bell className="h-4 w-4" />
+            <Bell className="h-4 w-4 text-primary" />
           </MarsButton>
 
           <MarsButton variant="ghost" size="sm">
-            <Settings className="h-4 w-4" />
+            <Settings className="h-4 w-4 text-primary" />
           </MarsButton>
 
           <div className="flex items-center gap-2 pl-2 border-l border-border">
@@ -106,7 +106,7 @@ export const MarsHeaderNav = () => {
               <p className="text-xs text-muted-foreground">Key Account Manager</p>
             </div>
             <MarsButton variant="ghost" size="sm">
-              <LogOut className="h-4 w-4" />
+              <LogOut className="h-4 w-4 text-accent" />
             </MarsButton>
           </div>
         </div>
