@@ -146,18 +146,20 @@ Provide actionable insights in a professional but accessible tone. Use data from
     if (lowerMsg.includes('gum') && lowerMsg.includes('chocolate')) {
       return `📊 **Gum vs Chocolate Performance Analysis**
 
-**Gum Outperformance Drivers:**
+**Gum Leading Performance:**
+• **Current GSV**: $24.6M vs Chocolate $18.4M (+34% outperformance)
+• **Growth Rate**: +34% vs Chocolate +14%
 • **Search Strategy**: 34% increase in PDP traffic from microseason campaigns
 • **Retailer Mix**: Strong Walmart (+28% GSV) and Target (+19% GSV) performance
 • **Media Timing**: Q2 investment aligned with back-to-school prep
 • **Promo Calendar**: Better shelf space during key periods
 
-**Chocolate Challenges:**
-• Amazon velocity down 12% due to inventory gaps
-• Premium segments underperforming in inflationary environment
-• Media ROI 23% lower than category average
+**Why Gum is Winning:**
+• Back-to-school campaign timing captured 85% of traffic surge
+• Shelf execution improved 23% vs previous quarter
+• Strong velocity correlation (0.89 coefficient) with media spend timing
 
-**Recommendation**: Reallocate 15% of Chocolate media budget to Gum microseasons in Q3.`;
+**Recommendation**: Continue Gum momentum while optimizing Chocolate strategy.`;
     }
     
     if (lowerMsg.includes('walmart')) {
@@ -177,7 +179,7 @@ Provide actionable insights in a professional but accessible tone. Use data from
 • Q3 Halloween prep starting early this year`;
     }
     
-    return `🤖 Based on your Mars DCom data: YTD Digital Sales are tracking +16% vs LY. Top performing channel: Walmart (+24% GSV). Biggest opportunity: Amazon optimization (-8% velocity). Next recommended action: Review Q3 media allocation.`;
+    return `🤖 Based on your Mars DCom data: YTD Digital Sales are tracking +16% vs LY. Top performing category: Gum (+34% GSV, $24.6M). Top performing channel: Walmart (+24% GSV). Biggest opportunity: Amazon optimization (-8% velocity). Next recommended action: Continue Gum investment strategy and review Chocolate optimization.`;
   };
 
   const handleSend = async () => {

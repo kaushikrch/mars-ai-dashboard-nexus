@@ -97,9 +97,9 @@ const DATA: Record<Country, Record<TimePeriod, PageData>> = {
         { name: 'Uber',      gsvM: 1.2,  growthPct: 15,  progress: 58, badge: 'On-Demand' },
       ],
       categories: [
-        { name: 'Chocolate', gsvM: 18.4, growthPct: 14, progress: 78, badge: 'Leader' },
+        { name: 'Gum',       gsvM: 24.6, growthPct: 34, progress: 92, badge: 'Outperformer' },
+        { name: 'Chocolate', gsvM: 18.4, growthPct: 14, progress: 78, badge: 'Strong' },
         { name: 'Fruity',    gsvM: 9.1,  growthPct: 9,  progress: 62, badge: 'Solid' },
-        { name: 'Gum',       gsvM: 6.7,  growthPct: 4,  progress: 55, badge: 'Flat' },
         { name: 'Mint',      gsvM: 4.8,  growthPct: 7,  progress: 59, badge: 'Building' },
       ],
       quarters: [
@@ -131,9 +131,9 @@ const DATA: Record<Country, Record<TimePeriod, PageData>> = {
         { name: 'Uber',      gsvM: 0.9,  growthPct: 10, progress: 48, badge: 'On-Demand' },
       ],
       categories: [
-        { name: 'Chocolate', gsvM: 15.9, growthPct: 8,  progress: 70, badge: 'Leader' },
+        { name: 'Gum',       gsvM: 18.4, growthPct: 21, progress: 85, badge: 'Leader' },
+        { name: 'Chocolate', gsvM: 15.9, growthPct: 8,  progress: 70, badge: 'Strong' },
         { name: 'Fruity',    gsvM: 8.5,  growthPct: 6,  progress: 58, badge: 'Solid' },
-        { name: 'Gum',       gsvM: 6.2,  growthPct: 2,  progress: 51, badge: 'Flat' },
         { name: 'Mint',      gsvM: 4.3,  growthPct: 3,  progress: 50, badge: 'Flat' },
       ],
       quarters: [
