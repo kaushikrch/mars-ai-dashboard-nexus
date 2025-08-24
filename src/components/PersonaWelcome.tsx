@@ -191,7 +191,7 @@ const DCOM_COMP = [
   }
 ];
 
-const PIE_COLORS = ['#7c3aed', '#f59e0b', '#10b981', '#0ea5e9'];
+const PIE_COLORS = ['hsl(var(--primary))', 'hsl(var(--success))', 'hsl(var(--warning))', 'hsl(var(--danger))'];
 
 const pct = (v: number) => `${v}%`;
 const changeColor = (v: number) => (v >= 0 ? 'text-success' : 'text-danger');
