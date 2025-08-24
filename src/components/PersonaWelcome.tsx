@@ -521,6 +521,7 @@ export const PersonaWelcome = () => {
 
   /* ---------- Persona Dashboard ---------- */
   const persona = personas[selectedPersona];
+  const PersonaIcon = persona.icon as React.ComponentType<any>;
 
   /* ----- Brand view: filters & derived KPIs from previous step ----- */
   const isBrandView = persona.title === 'Brand/Category Manager';
@@ -571,7 +572,7 @@ export const PersonaWelcome = () => {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}>
-              <persona.icon className="h-6 w-6" />
+              <PersonaIcon className="h-6 w-6" />
             </div>
             <div>
               <h2 className="text-xl font-bold">{persona.title} Dashboard</h2>
