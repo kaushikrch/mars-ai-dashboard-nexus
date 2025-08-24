@@ -460,7 +460,14 @@ export const PersonaWelcome = () => {
     return BRAND_PAGE[timePeriodB][categoryB].brands.map(b => b.name);
   }, [timePeriodB, categoryB, selectedPersona]);
 
+  const catBlock = BRAND_PAGE[timePeriodB][categoryB];
   const [brands, setBrands] = useState<string[]>([]);
+
+  // Keep hook order stable across renders
+  const selectedRows = useMemo(
+    () => catBlock.brands.filter(b => brands.includes(b.name)),
+    [catBlock.brands, brands]
+  );
 
   useEffect(() => {
     // Debug: track persona and brand options
@@ -528,8 +535,6 @@ export const PersonaWelcome = () => {
   /* ----- Brand view: filters & derived KPIs from previous step ----- */
   const isBrandView = persona.title === 'Brand/Category Manager';
 
-  const catBlock = BRAND_PAGE[timePeriodB][categoryB];
-  const selectedRows = useMemo(() => catBlock.brands.filter(b => brands.includes(b.name)), [catBlock.brands, brands]);
   const gsvTotal = selectedRows.reduce((s, r) => s + r.gsvM, 0);
   const yoyWeighted = gsvTotal > 0 ? selectedRows.reduce((s, r) => s + r.yoyPct * r.gsvM, 0) / gsvTotal : 0;
 
