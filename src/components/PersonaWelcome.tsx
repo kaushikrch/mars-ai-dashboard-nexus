@@ -462,10 +462,12 @@ export const PersonaWelcome = () => {
 
   const [brands, setBrands] = useState<string[]>([]);
 
-  useEffect(() => { 
+  useEffect(() => {
     // Debug: track persona and brand options
     console.log('[PersonaWelcome] render', { selectedPersona, timePeriodB, categoryB, brandOptionsLen: brandOptions.length });
-    setBrands(brandOptions); 
+    if (selectedPersona) {
+      setBrands(brandOptions);
+    } 
   }, [brandOptions, selectedPersona, timePeriodB, categoryB]);
 
   /* ---------- Welcome Screen ---------- */
