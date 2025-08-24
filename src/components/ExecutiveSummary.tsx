@@ -15,7 +15,7 @@ import {
 */
 
 import {
-  ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LabelList,
+  ResponsiveContainer, ComposedChart, Bar, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LabelList,
 } from 'recharts';
 
 type PlanStatus = 'completed' | 'in-progress' | 'upcoming';
@@ -319,34 +319,34 @@ export const ExecutiveSummary = () => {
         <KPICard
           title="GSV YTD"
           value={asMoneyM(page.kpis.gsvYtdM)}
-          change={`${page.kpis.gsvGrowthPct.toFixed(1)}%`}
+          change={`${page.kpis.gsvGrowthPct >= 0 ? '+' : ''}${page.kpis.gsvGrowthPct.toFixed(1)}% vs LY`}
           changeType={trendType(page.kpis.gsvGrowthPct)}
           icon="dollar"
-          subtitle="GSV Growth"
+          subtitle={`${asMoneyM(page.kpis.gsvYtdM)} GSV, ${page.kpis.gsvGrowthPct.toFixed(1)}% growth compared to LY`}
         />
         <KPICard
           title="Annual GSV Plan"
           value={asMoneyM(page.kpis.annualGsvPlanM)}
-          change={`${page.kpis.yoyGrowthPlanPct.toFixed(1)}%`}
+          change={`${page.kpis.yoyGrowthPlanPct >= 0 ? '+' : ''}${page.kpis.yoyGrowthPlanPct.toFixed(1)}% plan`}
           changeType={trendType(page.kpis.yoyGrowthPlanPct)}
           icon="target"
-          subtitle="YoY Growth Plan"
+          subtitle={`Annual plan of ${asMoneyM(page.kpis.annualGsvPlanM)}, targeting ${page.kpis.yoyGrowthPlanPct.toFixed(1)}% YoY growth`}
         />
         <KPICard
           title="Share of Search (SOS)"
           value={`${page.kpis.sosPct.toFixed(0)}%`}
-          change={`${page.kpis.sosDeltaPts.toFixed(1)} pts`}
+          change={`${page.kpis.sosDeltaPts >= 0 ? '+' : ''}${page.kpis.sosDeltaPts.toFixed(1)} pts vs LY`}
           changeType={trendType(page.kpis.sosDeltaPts)}
           icon="target"
-          subtitle="vs LY"
+          subtitle={`${page.kpis.sosPct}% share of search, ${page.kpis.sosDeltaPts >= 0 ? 'up' : 'down'} ${Math.abs(page.kpis.sosDeltaPts).toFixed(1)} points from last year`}
         />
         <KPICard
           title="Shopper Media ROAS"
           value={`$${page.kpis.shopperRoas.toFixed(1)}`}
-          change={`${((page.kpis.shopperRoas / Math.max(page.kpis.mediaSpendYtdM, 0.001)) * 100).toFixed(0)}%`}
+          change={`${asMoneyM(page.kpis.mediaSpendYtdM)} spent YTD`}
           changeType="positive"
           icon="dollar"
-          subtitle="vs Media Spend YTD"
+          subtitle={`$${page.kpis.shopperRoas.toFixed(1)} return for every $1 spent on media (${asMoneyM(page.kpis.mediaSpendYtdM)} total spend YTD)`}
         />
       </div>
 
@@ -400,7 +400,7 @@ export const ExecutiveSummary = () => {
         <h3 className="text-lg font-semibold mb-4">GSV Growth by Quarter</h3>
         <div className="h-72">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={page.quarters} barGap={6} barCategoryGap="20%">
+            <ComposedChart data={page.quarters} barGap={6} barCategoryGap="20%">
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="q" />
               <YAxis yAxisId="left" tickFormatter={(v) => `$${v}M`} />
@@ -408,12 +408,12 @@ export const ExecutiveSummary = () => {
               <Tooltip formatter={(val: any, name: string) => name.includes('YoY') ? [`${val}%`, name] : [`$${val}M`, name]} />
               <Legend />
               {/* Absolute GSV */}
-              <Bar yAxisId="left" dataKey="gsvM" name="GSV (M)" radius={[6, 6, 0, 0]}>
+              <Bar yAxisId="left" dataKey="gsvM" name="GSV (M)" radius={[6, 6, 0, 0]} fill="hsl(var(--primary))">
                 <LabelList dataKey="rag" content={renderRagLabel} />
               </Bar>
-              {/* YoY % Growth */}
-              <Bar yAxisId="right" dataKey="yoyPct" name="YoY % Growth" radius={[6, 6, 0, 0]} />
-            </BarChart>
+              {/* YoY % Growth as Line */}
+              <Line yAxisId="right" type="monotone" dataKey="yoyPct" stroke="hsl(var(--mars-orange))" strokeWidth={3} name="YoY % Growth" dot={{ fill: "hsl(var(--mars-orange))", strokeWidth: 2, r: 4 }} />
+            </ComposedChart>
           </ResponsiveContainer>
         </div>
       </Card>
