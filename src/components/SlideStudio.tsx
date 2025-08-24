@@ -35,6 +35,14 @@ const slideTemplates = {
     'Investment Recommendations',
     'Next Steps & Timeline'
   ],
+  'Monthly Business Review': [
+    'Executive Summary',
+    'Key Drivers',
+    'GSV YoY Growth',
+    'Cell & Customer Opportunities',
+    'DCOM Financials',
+    'Target Share Snapshot'
+  ]
   'Account Specific': [
     'Retailer Performance Overview',
     'Category Growth Drivers',
@@ -88,11 +96,18 @@ export const SlideStudio = () => {
     [selectedTemplate, selectedStyle, additionalNarrative, appendMode, audience, tone]
   );
 
+  const formatContext = (ctx?: Record<string, any>) =>
+    ctx
+      ? Object.entries(ctx)
+          .map(([k, v]) => `${k}:${Array.isArray(v) ? v.join('/') : String(v)}`)
+          .join(', ')
+      : '';
+
   const appendFromInbox = (ids: string[] | 'all') => {
     const toAppend = (ids === 'all' ? insights : insights.filter(i => ids.includes(i.id)))
       .map(i => {
-        const ctx = i.context ? ` (${Object.entries(i.context).map(([k,v]) => `${k}:${Array.isArray(v)?v.join('/') : v}`).join(', ')})` : '';
-        return `${i.persona} — ${i.title}${ctx}: ${i.text}`;
+        const ctx = formatContext(i.context);
+        return `${i.persona} — ${i.title}${ctx ? ` (${ctx})` : ''}: ${i.text}`;
       })
       .join('\n');
     setAdditionalNarrative(prev => (prev ? prev + '\n' : '') + toAppend);
