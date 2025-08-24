@@ -300,7 +300,7 @@ const changeColor = (v: number) => (v >= 0 ? 'text-success' : 'text-danger');
 // ----------------------------------------------------------------
 
 export const PersonaWelcome = () => {
-  const router = useRouter();
+  const navigate = useNavigate();
   const [selectedPersona, setSelectedPersona] = useState<keyof typeof personas | null>(null);
 
   // ---------- Welcome Screen ----------
@@ -323,7 +323,7 @@ export const PersonaWelcome = () => {
               key={key}
               className="p-6 bg-gradient-glow border-mars-blue-secondary shadow-card cursor-pointer hover:shadow-glow hover:scale-105 transition-all duration-300"
               onClick={() => {
-                if (key === 'Executive Leadership') router.push(EXEC_DASHBOARD_ROUTE);
+                if (key === 'Executive Leadership') navigate(EXEC_DASHBOARD_ROUTE);
                 else setSelectedPersona(key as keyof typeof personas);
               }}
             >
