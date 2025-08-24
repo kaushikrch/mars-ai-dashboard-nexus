@@ -481,7 +481,7 @@ export const PersonaWelcome = () => {
         </Card>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-          {Object.entries(personas).map(([key, persona]) => (
+          {Object.entries(personas).map(([key, p]) => (
             <Card
               key={key}
               className="p-6 bg-gradient-glow border-mars-blue-secondary shadow-card cursor-pointer hover:shadow-glow hover:scale-105 transition-all duration-300"
@@ -491,14 +491,14 @@ export const PersonaWelcome = () => {
               }}
             >
               <div className="text-center space-y-4">
-                <div className="mx-auto w-16 h-16 rounded-full flex items-center justify-center" style={{ backgroundColor: persona.color }}>
-                  <persona.icon className="h-8 w-8 text-white" />
+                <div className="mx-auto w-16 h-16 rounded-full flex items-center justify-center" style={{ backgroundColor: p.color }}>
+                  <p.icon className="h-8 w-8 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg">{persona.title}</h3>
-                  <p className="text-sm text-muted-foreground mt-2">{persona.description}</p>
+                  <h3 className="font-semibold text-lg">{p.title}</h3>
+                  <p className="text-sm text-muted-foreground mt-2">{p.description}</p>
                 </div>
-                <Button className="w-full" style={{ backgroundColor: persona.color }}>
+                <Button className="w-full" style={{ backgroundColor: p.color }}>
                   View Dashboard
                 </Button>
               </div>
@@ -658,18 +658,24 @@ export const PersonaWelcome = () => {
           <Card className="p-6 bg-gradient-glow border-mars-blue-secondary shadow-card">
             <h3 className="font-semibold mb-4">Performance by Brands — {categoryB}</h3>
             <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <ComposedChart data={selectedRows}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis yAxisId="left" tickFormatter={(v) => `$${v}M`} />
-                  <YAxis yAxisId="right" orientation="right" tickFormatter={(v) => `${v}%`} />
-                  <Tooltip formatter={(val: any, name: string) => name.includes('YoY') ? [`${val}%`, name] : [`$${val}M`, name]} />
-                  <Legend />
-                  <Bar yAxisId="left" dataKey="gsvM" name="GSV (M)" radius={[6,6,0,0]} />
-                  <Line yAxisId="right" type="monotone" dataKey="yoyPct" name="YoY % Change" strokeWidth={3} dot />
-                </ComposedChart>
-              </ResponsiveContainer>
+              {selectedRows.length === 0 ? (
+                <div className="h-full flex items-center justify-center text-sm text-muted-foreground">
+                  Select one or more brands to view performance.
+                </div>
+              ) : (
+                <ResponsiveContainer width="100%" height="100%">
+                  <ComposedChart data={selectedRows}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis yAxisId="left" tickFormatter={(v) => `$${v}M`} />
+                    <YAxis yAxisId="right" orientation="right" tickFormatter={(v) => `${v}%`} />
+                    <Tooltip formatter={(val: any, name: string) => name.includes('YoY') ? [`${val}%`, name] : [`$${val}M`, name]} />
+                    <Legend />
+                    <Bar yAxisId="left" dataKey="gsvM" name="GSV (M)" radius={[6,6,0,0]} />
+                    <Line yAxisId="right" type="monotone" dataKey="yoyPct" name="YoY % Change" strokeWidth={3} dot />
+                  </ComposedChart>
+                </ResponsiveContainer>
+              )}
             </div>
           </Card>
         </>
