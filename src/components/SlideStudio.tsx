@@ -42,7 +42,7 @@ const slideTemplates = {
     'Cell & Customer Opportunities',
     'DCOM Financials',
     'Target Share Snapshot'
-  ]
+  ],
   'Account Specific': [
     'Retailer Performance Overview',
     'Category Growth Drivers',
