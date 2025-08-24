@@ -347,9 +347,9 @@ export const PersonaWelcome = () => {
               <Tooltip formatter={(v: any) => [`${v}%`, 'Market Share']} />
               <Legend />
               <Bar dataKey="Chocolate" fill="hsl(var(--primary))" radius={[6, 6, 0, 0]} />
-              <Bar dataKey="Mint" fill="hsl(var(--danger))" radius={[6, 6, 0, 0]} />
               <Bar dataKey="Fruity" fill="hsl(var(--success))" radius={[6, 6, 0, 0]} />
               <Bar dataKey="Gum" fill="hsl(var(--warning))" radius={[6, 6, 0, 0]} />
+              <Bar dataKey="Mint" fill="hsl(var(--danger))" radius={[6, 6, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
