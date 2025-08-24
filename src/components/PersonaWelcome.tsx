@@ -157,10 +157,10 @@ const KAM_CATEGORY_MIX = [
 ];
 
 const KAM_CUSTOMER_CATEGORY_SHARE = [
-  { category: 'Chocolate', Walmart: 22, Target: 18, Amazon: 16, Kroger: 12 },
-  { category: 'Fruity',    Walmart: 19, Target: 17, Amazon: 14, Kroger: 10 },
-  { category: 'Gum',       Walmart: 11, Target: 9,  Amazon: 7,  Kroger: 6  },
-  { category: 'Mint',      Walmart: 13, Target: 10, Amazon: 8,  Kroger: 7  },
+  { customer: 'Amazon', Chocolate: 56, Mint: 28, Fruity: 12, Gum: 8 },
+  { customer: 'Walmart', Chocolate: 32, Mint: 45, Fruity: 24, Gum: 15 },
+  { customer: 'Target', Chocolate: 44, Mint: 18, Fruity: 35, Gum: 72 },
+  { customer: 'Kroger', Chocolate: 38, Mint: 22, Fruity: 28, Gum: 25 },
 ];
 
 // Competitor DCom share grid values (example demo data)
@@ -174,7 +174,7 @@ const DCOM_COMP = [
     Mint: { share: 20.4, change: +2.2, growth: 14.73 }
   },
   {
-    name: 'Ferrero/Ferrara',
+    name: 'Ferraro',
     Total:  { share: 10.2, change: +0.1, growth: 16.27 },
     Chocolate: { share: 5.5, change: -0.7, growth: 8.06 },
     Fruity: { share: 19.2, change: +1.4, growth: 32.77 },
@@ -332,24 +332,24 @@ export const PersonaWelcome = () => {
         </Card>
       )}
 
-      {/* Chart: Market/Total Share by Customer across Categories (Grouped Bars) */}
+      {/* Chart: Market Share by Retailer across Categories */}
       <Card className="p-6 bg-gradient-glow border-mars-blue-secondary shadow-card">
         <h3 className="font-semibold mb-4 flex items-center gap-2">
           <BarChart3 className="h-5 w-5 text-primary" />
-          Category Share by Customer (Market Total)
+          Market Share by Retailer
         </h3>
         <div className="h-80">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={KAM_CUSTOMER_CATEGORY_SHARE} barGap={6}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="category" />
+              <XAxis dataKey="customer" />
               <YAxis tickFormatter={(v) => `${v}%`} />
-              <Tooltip formatter={(v: any) => [`${v}%`, 'Share']} />
+              <Tooltip formatter={(v: any) => [`${v}%`, 'Market Share']} />
               <Legend />
-              <Bar dataKey="Walmart" radius={[6, 6, 0, 0]} />
-              <Bar dataKey="Target" radius={[6, 6, 0, 0]} />
-              <Bar dataKey="Amazon" radius={[6, 6, 0, 0]} />
-              <Bar dataKey="Kroger" radius={[6, 6, 0, 0]} />
+              <Bar dataKey="Chocolate" fill="hsl(var(--primary))" radius={[6, 6, 0, 0]} />
+              <Bar dataKey="Mint" fill="hsl(var(--danger))" radius={[6, 6, 0, 0]} />
+              <Bar dataKey="Fruity" fill="hsl(var(--success))" radius={[6, 6, 0, 0]} />
+              <Bar dataKey="Gum" fill="hsl(var(--warning))" radius={[6, 6, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
