@@ -322,7 +322,7 @@ export const ExecutiveSummary = () => {
           change={`${page.kpis.gsvGrowthPct >= 0 ? '+' : ''}${page.kpis.gsvGrowthPct.toFixed(1)}% vs LY`}
           changeType={trendType(page.kpis.gsvGrowthPct)}
           icon="dollar"
-          subtitle={`${asMoneyM(page.kpis.gsvYtdM)} GSV, ${page.kpis.gsvGrowthPct.toFixed(1)}% growth compared to LY`}
+          subtitle={`Last year: ${asMoneyM(page.kpis.gsvYtdM / (1 + page.kpis.gsvGrowthPct / 100))}`}
         />
         <KPICard
           title="Annual GSV Plan"
@@ -330,7 +330,7 @@ export const ExecutiveSummary = () => {
           change={`${page.kpis.yoyGrowthPlanPct >= 0 ? '+' : ''}${page.kpis.yoyGrowthPlanPct.toFixed(1)}% plan`}
           changeType={trendType(page.kpis.yoyGrowthPlanPct)}
           icon="target"
-          subtitle={`Annual plan of ${asMoneyM(page.kpis.annualGsvPlanM)}, targeting ${page.kpis.yoyGrowthPlanPct.toFixed(1)}% YoY growth`}
+          subtitle={`On track to deliver ${page.kpis.yoyGrowthPlanPct.toFixed(1)}% growth`}
         />
         <KPICard
           title="Share of Search (SOS)"
@@ -338,7 +338,7 @@ export const ExecutiveSummary = () => {
           change={`${page.kpis.sosDeltaPts >= 0 ? '+' : ''}${page.kpis.sosDeltaPts.toFixed(1)} pts vs LY`}
           changeType={trendType(page.kpis.sosDeltaPts)}
           icon="target"
-          subtitle={`${page.kpis.sosPct}% share of search, ${page.kpis.sosDeltaPts >= 0 ? 'up' : 'down'} ${Math.abs(page.kpis.sosDeltaPts).toFixed(1)} points from last year`}
+          subtitle={`Last year: ${(page.kpis.sosPct - page.kpis.sosDeltaPts).toFixed(0)}%`}
         />
         <KPICard
           title="Shopper Media ROAS"
@@ -346,7 +346,7 @@ export const ExecutiveSummary = () => {
           change={`${asMoneyM(page.kpis.mediaSpendYtdM)} spent YTD`}
           changeType="positive"
           icon="dollar"
-          subtitle={`$${page.kpis.shopperRoas.toFixed(1)} return for every $1 spent on media (${asMoneyM(page.kpis.mediaSpendYtdM)} total spend YTD)`}
+          subtitle={`Every $1 generates $${page.kpis.shopperRoas.toFixed(1)} in sales`}
         />
       </div>
 
