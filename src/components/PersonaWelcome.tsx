@@ -150,17 +150,17 @@ const personas: Record<string, PersonaDef> = {
 
 // ---- KAM-only mock datasets ----
 const KAM_CATEGORY_MIX = [
-  { name: 'Chocolate', value: 52, yoy: 14, rank: 1 },
-  { name: 'Fruity', value: 26, yoy: 9,  rank: 2 },
-  { name: 'Gum',      value: 15, yoy: 4,  rank: 3 },
-  { name: 'Mint',     value: 7,  yoy: 7,  rank: 4 },
+  { name: 'Chocolate', value: 42, yoy: 14, rank: 1 },
+  { name: 'Fruity', value: 25, yoy: 9,  rank: 2 },
+  { name: 'Gum', value: 18, yoy: 4,  rank: 3 },
+  { name: 'Mint', value: 15,  yoy: 7,  rank: 4 },
 ];
 
 const KAM_CUSTOMER_CATEGORY_SHARE = [
-  { customer: 'Amazon', Chocolate: 56, Mint: 28, Fruity: 12, Gum: 8 },
-  { customer: 'Walmart', Chocolate: 32, Mint: 45, Fruity: 24, Gum: 15 },
-  { customer: 'Target', Chocolate: 44, Mint: 18, Fruity: 35, Gum: 72 },
-  { customer: 'Kroger', Chocolate: 38, Mint: 22, Fruity: 28, Gum: 25 },
+  { customer: 'Amazon', Chocolate: 48, Mint: 18, Fruity: 22, Gum: 12 },
+  { customer: 'Walmart', Chocolate: 38, Mint: 15, Fruity: 28, Gum: 19 },
+  { customer: 'Target', Chocolate: 44, Mint: 12, Fruity: 26, Gum: 18 },
+  { customer: 'Kroger', Chocolate: 38, Mint: 16, Fruity: 24, Gum: 22 },
 ];
 
 // Competitor DCom share grid values (example demo data)
