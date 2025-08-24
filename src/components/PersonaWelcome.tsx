@@ -149,21 +149,6 @@ const personas: Record<string, PersonaDef> = {
   }
 };
 
-// ---- KAM-only mock datasets ----
-const KAM_CATEGORY_MIX = [
-  { name: 'Chocolate', value: 42, yoy: 14, rank: 1 },
-  { name: 'Fruity', value: 25, yoy: 9,  rank: 2 },
-  { name: 'Gum', value: 18, yoy: 4,  rank: 3 },
-  { name: 'Mint', value: 15,  yoy: 7,  rank: 4 },
-];
-
-const KAM_CUSTOMER_CATEGORY_SHARE = [
-  { customer: 'Amazon', Chocolate: 48, Mint: 18, Fruity: 22, Gum: 12 },
-  { customer: 'Walmart', Chocolate: 38, Mint: 15, Fruity: 28, Gum: 19 },
-  { customer: 'Target', Chocolate: 44, Mint: 12, Fruity: 26, Gum: 18 },
-  { customer: 'Kroger', Chocolate: 38, Mint: 16, Fruity: 24, Gum: 22 },
-];
-
 // Competitor DCom share grid values (example demo data)
 const DCOM_COMP = [
   {
@@ -192,16 +177,110 @@ const DCOM_COMP = [
   }
 ];
 
+// ---- KAM Data by Customer and Time Period ----
+const KAM_DATA = {
+  'All Customers': {
+    '2025 YTD': {
+      metrics: [
+        { label: 'Customer GSV YTD', value: '$12.3M', change: 'vs LY', status: 'success', target: '$11.8M' },
+        { label: 'GSV % Change YoY', value: '+24%', change: 'Target: +20%', status: 'success', target: '+20%' },
+        { label: 'Online Share', value: '23%', change: '+2.3 pts', status: 'success', target: '≥22%' },
+        { label: 'Customer Market Share', value: '18.2%', change: '+0.8 pts', status: 'success', target: '19.0%' }
+      ],
+      categoryMix: [
+        { name: 'Chocolate', value: 42, yoy: 14, rank: 1 },
+        { name: 'Fruity', value: 25, yoy: 9, rank: 2 },
+        { name: 'Gum', value: 18, yoy: 4, rank: 3 },
+        { name: 'Mint', value: 15, yoy: 7, rank: 4 },
+      ],
+      customerShare: [
+        { customer: 'Amazon', Chocolate: 48, Fruity: 22, Gum: 12, Mint: 18 },
+        { customer: 'Walmart', Chocolate: 38, Fruity: 28, Gum: 19, Mint: 15 },
+        { customer: 'Target', Chocolate: 44, Fruity: 26, Gum: 18, Mint: 12 },
+        { customer: 'Kroger', Chocolate: 38, Fruity: 24, Gum: 22, Mint: 16 },
+      ]
+    },
+    '2024 YTD': {
+      metrics: [
+        { label: 'Customer GSV YTD', value: '$11.8M', change: 'vs LY', status: 'success', target: '$11.0M' },
+        { label: 'GSV % Change YoY', value: '+18%', change: 'Target: +15%', status: 'success', target: '+15%' },
+        { label: 'Online Share', value: '21%', change: '+1.8 pts', status: 'success', target: '≥20%' },
+        { label: 'Customer Market Share', value: '17.4%', change: '+0.6 pts', status: 'success', target: '18.0%' }
+      ],
+      categoryMix: [
+        { name: 'Chocolate', value: 45, yoy: 12, rank: 1 },
+        { name: 'Fruity', value: 23, yoy: 8, rank: 2 },
+        { name: 'Gum', value: 17, yoy: 3, rank: 3 },
+        { name: 'Mint', value: 15, yoy: 5, rank: 4 },
+      ],
+      customerShare: [
+        { customer: 'Amazon', Chocolate: 46, Fruity: 20, Gum: 14, Mint: 20 },
+        { customer: 'Walmart', Chocolate: 42, Fruity: 25, Gum: 18, Mint: 15 },
+        { customer: 'Target', Chocolate: 48, Fruity: 24, Gum: 16, Mint: 12 },
+        { customer: 'Kroger', Chocolate: 44, Fruity: 23, Gum: 19, Mint: 14 },
+      ]
+    }
+  },
+  'Amazon': {
+    '2025 YTD': {
+      metrics: [
+        { label: 'Customer GSV YTD', value: '$3.8M', change: 'vs LY', status: 'warning', target: '$4.2M' },
+        { label: 'GSV % Change YoY', value: '+8%', change: 'Target: +20%', status: 'warning', target: '+20%' },
+        { label: 'Online Share', value: '56%', change: '+1.2 pts', status: 'success', target: '≥55%' },
+        { label: 'Customer Market Share', value: '16.5%', change: '-0.3 pts', status: 'warning', target: '17.0%' }
+      ],
+      categoryMix: [
+        { name: 'Chocolate', value: 48, yoy: 6, rank: 1 },
+        { name: 'Fruity', value: 22, yoy: 12, rank: 2 },
+        { name: 'Gum', value: 12, yoy: -2, rank: 4 },
+        { name: 'Mint', value: 18, yoy: 8, rank: 3 },
+      ],
+      customerShare: [
+        { customer: 'Amazon', Chocolate: 48, Fruity: 22, Gum: 12, Mint: 18 },
+      ]
+    }
+  },
+  'Walmart': {
+    '2025 YTD': {
+      metrics: [
+        { label: 'Customer GSV YTD', value: '$4.2M', change: 'vs LY', status: 'success', target: '$3.8M' },
+        { label: 'GSV % Change YoY', value: '+32%', change: 'Target: +20%', status: 'success', target: '+20%' },
+        { label: 'Online Share', value: '18%', change: '+3.2 pts', status: 'success', target: '≥15%' },
+        { label: 'Customer Market Share', value: '19.8%', change: '+1.4 pts', status: 'success', target: '19.0%' }
+      ],
+      categoryMix: [
+        { name: 'Chocolate', value: 38, yoy: 18, rank: 1 },
+        { name: 'Fruity', value: 28, yoy: 15, rank: 2 },
+        { name: 'Gum', value: 19, yoy: 8, rank: 3 },
+        { name: 'Mint', value: 15, yoy: 12, rank: 4 },
+      ],
+      customerShare: [
+        { customer: 'Walmart', Chocolate: 38, Fruity: 28, Gum: 19, Mint: 15 },
+      ]
+    }
+  }
+};
+
 const PIE_COLORS = ['hsl(var(--primary))', 'hsl(var(--success))', 'hsl(var(--warning))', 'hsl(var(--danger))'];
 
-const pct = (v: number) => `${v}%`;
 const changeColor = (v: number) => (v >= 0 ? 'text-success' : 'text-danger');
 
 export const PersonaWelcome = () => {
   const navigate = useNavigate();
   const [selectedPersona, setSelectedPersona] = useState<keyof typeof personas | null>(null);
   const [selectedCustomer, setSelectedCustomer] = useState('All Customers');
-  const [selectedTimePeriod, setSelectedTimePeriod] = useState('YTD 2024');
+  const [selectedTimePeriod, setSelectedTimePeriod] = useState('2025 YTD');
+
+  // Get dynamic data based on filters
+  const getKAMData = () => {
+    const customerData = KAM_DATA[selectedCustomer as keyof typeof KAM_DATA];
+    if (!customerData) return KAM_DATA['All Customers']['2025 YTD'];
+    
+    const timeData = customerData[selectedTimePeriod as keyof typeof customerData];
+    return timeData || customerData['2025 YTD'] || KAM_DATA['All Customers']['2025 YTD'];
+  };
+
+  const kamData = getKAMData();
 
   if (!selectedPersona) {
     return (
@@ -305,7 +384,8 @@ export const PersonaWelcome = () => {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-card border-border z-50">
-                  <SelectItem value="YTD 2024">YTD 2024</SelectItem>
+                  <SelectItem value="2025 YTD">2025 YTD</SelectItem>
+                  <SelectItem value="2024 YTD">2024 YTD</SelectItem>
                   <SelectItem value="Q4 2024">Q4 2024</SelectItem>
                   <SelectItem value="Q3 2024">Q3 2024</SelectItem>
                   <SelectItem value="Q2 2024">Q2 2024</SelectItem>
@@ -320,7 +400,7 @@ export const PersonaWelcome = () => {
 
       {/* KPI Tiles */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {persona.metrics.map((metric, index) => (
+        {(persona.title === 'Key Account Manager' ? kamData.metrics : persona.metrics).map((metric, index) => (
           <Card key={index} className="p-6 bg-gradient-glow border-mars-blue-secondary shadow-card">
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground">{metric.label}</p>
@@ -352,8 +432,8 @@ export const PersonaWelcome = () => {
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                  <Pie dataKey="value" data={KAM_CATEGORY_MIX} innerRadius={48} outerRadius={90} paddingAngle={2}>
-                    {KAM_CATEGORY_MIX.map((_, i) => <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />)}
+                  <Pie dataKey="value" data={kamData.categoryMix} innerRadius={48} outerRadius={90} paddingAngle={2}>
+                    {kamData.categoryMix.map((_, i) => <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />)}
                   </Pie>
                   <Tooltip formatter={(v: any) => [`${v}%`, '% of Business']} />
                   <Legend />
@@ -361,7 +441,7 @@ export const PersonaWelcome = () => {
               </ResponsiveContainer>
             </div>
             <div className="grid grid-cols-2 gap-3">
-              {KAM_CATEGORY_MIX.map((c) => (
+              {kamData.categoryMix.map((c) => (
                 <div key={c.name} className="p-3 rounded-lg bg-muted/30">
                   <p className="text-sm font-medium">{c.name}</p>
                   <p className="text-xl font-bold">{c.value}%</p>
@@ -382,7 +462,7 @@ export const PersonaWelcome = () => {
         </h3>
         <div className="h-80">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={KAM_CUSTOMER_CATEGORY_SHARE} barGap={6}>
+            <BarChart data={kamData.customerShare} barGap={6}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="customer" />
               <YAxis tickFormatter={(v) => `${v}%`} />
