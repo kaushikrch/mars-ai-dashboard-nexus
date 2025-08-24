@@ -60,6 +60,15 @@ export function generateMarsSlideContent(
           { title: 'Investment Recommendations', content: ['+10% spend to top 20 KWs'] },
           { title: 'Next Steps & Timeline', content: ['Q4 checkpoints and owners'] }
         ]
+      : template === 'Monthly Business Review'
+      ? [
+          { title: 'Executive Summary', content: ['Digital performance YTD P6 +21% GSV YoY', 'On demand delivery +2% YoY', 'Shopper media ROAS strong'] },
+          { title: 'Key Drivers', content: ['Digital performance +21% GSV YTD', 'Category share 24.9% YTD P6', 'Amazon velocity lagging', 'Walmart & Target growth leads'] },
+          { title: 'GSV YoY Growth', content: ['Q1 +15% (+$20.5M)', 'Q2 +27.7% (+$34.9M)', 'Q3 +19.1% (+$23.5M)', 'Q4 +41.8% (+$91.2M forecast)'] },
+          { title: 'Cell & Customer Opportunities', content: ['Chocolate search gaps at Kroger/Amazon/Sam\'s Club', 'Fruity online gaps at Amazon', 'Gum share opportunity at Amazon', 'Mints trending upward'] },
+          { title: 'DCOM Financials', content: ['GSV YoY growth +2110bps vs Target', 'NSV 3rd pty -1162bps vs plan', 'COGS improvement 1238bps', 'MAC decrease 750bps'] },
+          { title: 'Target Share Snapshot', content: ['Total: Hershey 43.4% share (+1pt)', 'Chocolate: Hershey 41.1% share (+0.4pt)', 'Fruity: Ferrero 24.9% share (+0.5pt)', 'Gum: Mars 52.8% share (+0.8pt)'] }
+        ]
       : [
           { title: 'Retailer Performance Overview', content: ['Walmart +24% GSV', 'Amazon -8% velocity'] },
           { title: 'Category Growth Drivers', content: ['Gum +15% YoY in on-demand'] },
