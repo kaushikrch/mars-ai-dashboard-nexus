@@ -1,12 +1,20 @@
+'use client';
+
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { User, Users, TrendingUp, Target, ShoppingBag, BarChart3 } from 'lucide-react';
+import {
+  User, Users, TrendingUp, Target, ShoppingBag, BarChart3,
+  Search as SearchIcon, Megaphone, ArrowLeft
+} from 'lucide-react';
+
+const PERSONA_WELCOME_ROUTE = '/personas';
 
 const personas = {
-  'KAM': {
+  'Key Account Manager': {
     icon: ShoppingBag,
     title: 'Key Account Manager',
     description: 'Retailer-focused performance and relationship insights',
@@ -17,76 +25,102 @@ const personas = {
       { label: 'Promotion ROI', value: '$3.2', detail: 'Average ROAS', status: 'success' }
     ],
     aiSummary: {
-      working: "Walmart partnership is delivering exceptional results with 24% GSV growth driven by optimized shelf placement and promotional timing. Target relationship strengthening with 19% growth.",
-      action: "Focus Amazon recovery plan - address inventory gaps and renegotiate search placement. Sam's Club presents untapped opportunity for bulk formats.",
-      narrative: "Our strategic account management is paying dividends, with top retailers driving category share gains. Immediate action needed on Amazon to prevent Q4 risks."
+      working: 'Walmart partnership is delivering exceptional results with 24% GSV growth.',
+      action: "Focus Amazon recovery plan—address inventory gaps and renegotiate search placement.",
+      narrative: 'Top retailers are driving share gains; Amazon requires near-term action.'
     }
   },
-  'Brand Manager': {
+  'Brand/Category Manager': {
     icon: Target,
-    title: 'Brand Manager', 
+    title: 'Brand/Category Manager',
     description: 'Brand and category performance analysis',
     metrics: [
-      { label: 'Top Subcategory', value: 'Gum', detail: '+34% growth vs Chocolate', status: 'success' },
+      { label: 'Top Subcategory', value: 'Gum', detail: '+34% vs Chocolate', status: 'success' },
       { label: 'Brand Velocity', value: 'Skittles', detail: 'Search ranking #3 ↑5', status: 'success' },
       { label: 'Share Growth', value: '+1.4 pts', detail: 'Category leadership', status: 'success' },
-      { label: 'Innovation ROI', value: '$2.8M', detail: 'New product launches', status: 'warning' }
+      { label: 'Innovation ROI', value: '$2.8M', detail: 'New launches', status: 'warning' }
     ],
     aiSummary: {
-      working: "Gum category momentum accelerating with 34% growth driven by microseason strategy. Skittles search optimization delivering 89% voice share in target queries.",
-      action: "Reallocate 15% Chocolate media budget to Gum expansion. Launch Halloween innovation earlier to capture pre-season demand.",
-      narrative: "Our portfolio strategy is working - premiumization in Gum offsetting Chocolate pressures. Innovation pipeline needs acceleration for Q4 seasonal capture."
+      working: 'Gum momentum accelerating via microseason strategy; Skittles voice share at 89%.',
+      action: 'Reallocate 15% chocolate media to gum; bring Halloween innovation forward.',
+      narrative: 'Portfolio is healthy; accelerate innovations to capture seasonal demand.'
     }
   },
-  'Commercial Lead': {
-    icon: BarChart3,
-    title: 'Commercial Lead',
-    description: 'Revenue optimization and channel strategy',
+  'Search Manager': {
+    icon: SearchIcon,
+    title: 'Search Manager',
+    description: 'SOS, keyword strategy, and retail search performance',
     metrics: [
-      { label: 'Revenue YTD', value: '$47.2M', detail: '+16.3% vs LY', status: 'success' },
-      { label: 'Channel Mix', value: '65% Retail', detail: '35% E-commerce growing', status: 'success' },
-      { label: 'Margin Expansion', value: '+2.1%', detail: 'Premiumization impact', status: 'success' },
-      { label: 'Forecast Accuracy', value: '94%', detail: 'Demand planning', status: 'success' }
+      { label: 'Share of Search', value: '62%', detail: '+2.1 pts YoY', status: 'success' },
+      { label: 'Top KW ROAS', value: '$4.2', detail: '+18% vs LY', status: 'success' },
+      { label: 'Voice Queries', value: '+45%', detail: 'YoY', status: 'success' },
+      { label: 'PDP Traffic', value: '+18%', detail: 'QoQ', status: 'success' }
     ],
     aiSummary: {
-      working: "Revenue growth outpacing category at 16.3% with margin expansion from premiumization strategy. E-commerce channel growing 31% with strong on-demand penetration.",
-      action: "Optimize pricing architecture for Q4 seasonal demand. Expand high-margin SKUs in growth channels while protecting volume in core retail.",
-      narrative: "Commercial strategy delivering balanced growth across revenue and margin metrics. Strong foundation for Q4 seasonal uplift and annual planning."
+      working: 'Microseason keywords driving majority of incremental growth.',
+      action: 'Shift budget to top-converting KWs; prune long tail.',
+      narrative: 'Search hygiene + microseasoning compounding SOS.'
     }
   },
-  'Executive': {
+  'Media Manager': {
+    icon: Megaphone,
+    title: 'Media Manager',
+    description: 'Paid media efficiency and mix optimization',
+    metrics: [
+      { label: 'Shopper Media ROAS', value: '$4.2', detail: '+35% vs LY', status: 'success' },
+      { label: 'Spend YTD', value: '$11.8M', detail: '+9% vs LY', status: 'success' },
+      { label: 'Upper/Mid/Lower Mix', value: '20/35/45', detail: 'Within guardrail', status: 'success' },
+      { label: 'Frequency (Retail Media)', value: '3.4', detail: '+0.4 vs plan', status: 'success' }
+    ],
+    aiSummary: {
+      working: 'Lower-funnel placements returning strong ROAS.',
+      action: 'Test creatives on top SKUs to lift CTR.',
+      narrative: 'Cadence is efficient; expand in winning placements.'
+    }
+  },
+  'Executive Leadership': {
     icon: Users,
-    title: 'Executive',
+    title: 'Executive Leadership',
     description: 'Strategic overview and competitive positioning',
     metrics: [
       { label: 'Market Position', value: '#2 Player', detail: 'Category share 18.2%', status: 'success' },
-      { label: 'Competitive Gap', value: '-3.4 pts', detail: 'vs Category Leader', status: 'warning' },
-      { label: 'Strategic Initiatives', value: '4/5 On Track', detail: '90-day plan progress', status: 'success' },
+      { label: 'Competitive Gap', value: '-3.4 pts', detail: 'vs Leader', status: 'warning' },
+      { label: 'Strategic Initiatives', value: '4/5 On Track', detail: '90-day plan', status: 'success' },
       { label: 'Investment ROI', value: '$4.2', detail: 'Media spend efficiency', status: 'success' }
     ],
     aiSummary: {
-      working: "Strong market position with category share gains and superior ROI metrics. Digital transformation initiatives delivering measurable results across all channels.",
-      action: "Accelerate share gain momentum through increased investment in winning strategies. Consider strategic acquisition to close competitive gap.",
-      narrative: "Mars DCom is executing a winning strategy with clear competitive advantages. Ready to scale investments that are delivering outsized returns."
+      working: 'Share gains with superior ROI; digital initiatives delivering results.',
+      action: 'Accelerate winning strategies; evaluate selective M&A.',
+      narrative: 'Ready to scale investments with outsized returns.'
     }
   }
 };
 
 export const PersonaInsights = () => {
-  const [selectedPersona, setSelectedPersona] = useState<keyof typeof personas>('KAM');
+  const navigate = useNavigate();
+  const [selectedPersona, setSelectedPersona] = useState<keyof typeof personas>('Key Account Manager');
   const persona = personas[selectedPersona];
   const IconComponent = persona.icon;
 
   return (
     <div className="space-y-6 animate-slide-up">
-      {/* Persona Selector */}
+      {/* Persona Selector + Back */}
       <Card className="p-6 bg-gradient-glow border-mars-blue-secondary shadow-card">
-        <div className="flex items-center gap-4 mb-4">
-          <User className="h-6 w-6 text-primary" />
-          <h2 className="text-xl font-semibold">Persona-Based Dashboard</h2>
+        <div className="flex items-center justify-between gap-4 mb-4">
+          <div className="flex items-center gap-3">
+            <User className="h-6 w-6 text-primary" />
+            <h2 className="text-xl font-semibold">Persona-Based Dashboard</h2>
+          </div>
+          <button
+            className="inline-flex items-center gap-2 text-sm px-3 py-2 rounded-md border hover:bg-muted/50"
+            onClick={() => navigate(PERSONA_WELCOME_ROUTE)}
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Personas
+          </button>
         </div>
         <Select value={selectedPersona} onValueChange={(value) => setSelectedPersona(value as keyof typeof personas)}>
-          <SelectTrigger className="w-full md:w-[300px]">
+          <SelectTrigger className="w-full md:w-[320px]">
             <SelectValue placeholder="Select your role..." />
           </SelectTrigger>
           <SelectContent>
