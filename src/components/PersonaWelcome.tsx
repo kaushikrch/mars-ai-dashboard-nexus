@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useInsightsStore } from '@/state/useInsightsStore';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -442,6 +443,7 @@ const changeColor = (v: number) => (v >= 0 ? 'text-success' : 'text-danger');
 export const PersonaWelcome = () => {
   const navigate = useNavigate();
   const [selectedPersona, setSelectedPersona] = useState<keyof typeof personas | null>(null);
+  const { addPersonaTriple } = useInsightsStore();
 
   /* ---------- Welcome Screen ---------- */
   if (!selectedPersona) {
@@ -523,6 +525,32 @@ export const PersonaWelcome = () => {
 
   /* ----- Media Manager WIP ----- */
   const isMediaView = persona.title === 'Media Manager';
+
+  /* ----- Save insights to store ----- */
+  const saveInsightsToStore = () => {
+    const ctx: Record<string, any> = { persona: persona.title };
+
+    // If Brand view, include its filters
+    if (persona.title === 'Brand/Category Manager') {
+      ctx.timePeriod = timePeriodB;
+      ctx.category = categoryB;
+      ctx.brands = brands;
+    }
+
+    // If Search view, include its filters
+    if (persona.title === 'Search Manager') {
+      ctx.customer = searchCustomer;
+      ctx.timePeriod = searchPeriod;
+    }
+
+    addPersonaTriple(
+      persona.title,
+      persona.aiSummary?.working || '',
+      persona.aiSummary?.action || '',
+      persona.aiSummary?.narrative || '',
+      ctx
+    );
+  };
 
   return (
     <div className="space-y-6 animate-slide-up">
@@ -744,41 +772,50 @@ export const PersonaWelcome = () => {
 
       {/* ----- Aligned AI Insights ----- */}
       {!isMediaView && (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <Card className="p-6 bg-gradient-glow border-mars-blue-secondary shadow-card">
-            <h4 className="font-semibold mb-3 text-success flex items-center gap-2">
-              <TrendingUp className="h-4 w-4" />
-              What's Working?
-            </h4>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              {persona.title === 'Search Manager'
-                ? 'Microseason keywords & retail media synergy driving SOS; organic hygiene lifts SOV efficiently.'
-                : persona.aiSummary.working}
-            </p>
-          </Card>
-          <Card className="p-6 bg-gradient-glow border-mars-blue-secondary shadow-card">
-            <h4 className="font-semibold mb-3 text-warning flex items-center gap-2">
-              <Target className="h-4 w-4" />
-              Where to Act?
-            </h4>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              {persona.title === 'Search Manager'
-                ? 'Shift budget to top-converting KWs; prune low-ROAS tail; raise organic coverage on hero SKUs.'
-                : persona.aiSummary.action}
-            </p>
-          </Card>
-          <Card className="p-6 bg-gradient-glow border-mars-blue-secondary shadow-card">
-            <h4 className="font-semibold mb-3 text-primary flex items-center gap-2">
-              <Sparkles className="h-4 w-4" />
-              Executive Summary
-            </h4>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              {persona.title === 'Search Manager'
-                ? 'Search performance is reinforcing Executive growth: SOS up with balanced organic/paid SOV and improving CPC efficiency.'
-                : persona.aiSummary.narrative}
-            </p>
-          </Card>
-        </div>
+        <>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <Card className="p-6 bg-gradient-glow border-mars-blue-secondary shadow-card">
+              <h4 className="font-semibold mb-3 text-success flex items-center gap-2">
+                <TrendingUp className="h-4 w-4" />
+                What's Working?
+              </h4>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {persona.title === 'Search Manager'
+                  ? 'Microseason keywords & retail media synergy driving SOS; organic hygiene lifts SOV efficiently.'
+                  : persona.aiSummary.working}
+              </p>
+            </Card>
+            <Card className="p-6 bg-gradient-glow border-mars-blue-secondary shadow-card">
+              <h4 className="font-semibold mb-3 text-warning flex items-center gap-2">
+                <Target className="h-4 w-4" />
+                Where to Act?
+              </h4>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {persona.title === 'Search Manager'
+                  ? 'Shift budget to top-converting KWs; prune low-ROAS tail; raise organic coverage on hero SKUs.'
+                  : persona.aiSummary.action}
+              </p>
+            </Card>
+            <Card className="p-6 bg-gradient-glow border-mars-blue-secondary shadow-card">
+              <h4 className="font-semibold mb-3 text-primary flex items-center gap-2">
+                <Sparkles className="h-4 w-4" />
+                Executive Summary
+              </h4>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {persona.title === 'Search Manager'
+                  ? 'Search performance is reinforcing Executive growth: SOS up with balanced organic/paid SOV and improving CPC efficiency.'
+                  : persona.aiSummary.narrative}
+              </p>
+            </Card>
+          </div>
+          
+          {/* Save Insights Action */}
+          <div className="flex justify-end">
+            <Button variant="secondary" onClick={saveInsightsToStore} className="mt-[-8px]">
+              Save insights to Slide Studio
+            </Button>
+          </div>
+        </>
       )}
 
       {/* ----- KAM extras kept (pie & category share chart) ----- */}
