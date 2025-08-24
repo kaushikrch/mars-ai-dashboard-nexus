@@ -445,6 +445,27 @@ export const PersonaWelcome = () => {
   const [selectedPersona, setSelectedPersona] = useState<keyof typeof personas | null>(null);
   const { addPersonaTriple } = useInsightsStore();
 
+  // All hooks must be called before any conditional returns
+  const TIME_PERIODS = ['2025 YTD', '2024 YTD'] as const;
+  const CATS = ['Chocolate', 'Fruity', 'Gum', 'Mint'] as const;
+  const SEARCH_CUSTOMERS = ['Amazon', 'Walmart', 'Target', 'Instacart', 'DoorDash'] as const;
+
+  const [timePeriodB, setTimePeriodB] = useState<typeof TIME_PERIODS[number]>('2025 YTD');
+  const [categoryB, setCategoryB] = useState<typeof CATS[number]>('Chocolate');
+  const [searchCustomer, setSearchCustomer] = useState<typeof SEARCH_CUSTOMERS[number]>('Amazon');
+  const [searchPeriod, setSearchPeriod] = useState<typeof TIME_PERIODS[number]>('2025 YTD');
+
+  const brandOptions = useMemo(() => {
+    if (!selectedPersona) return [];
+    return BRAND_PAGE[timePeriodB][categoryB].brands.map(b => b.name);
+  }, [timePeriodB, categoryB, selectedPersona]);
+
+  const [brands, setBrands] = useState<string[]>([]);
+
+  useEffect(() => { 
+    setBrands(brandOptions); 
+  }, [brandOptions]);
+
   /* ---------- Welcome Screen ---------- */
   if (!selectedPersona) {
     return (
@@ -501,14 +522,6 @@ export const PersonaWelcome = () => {
 
   /* ----- Brand view: filters & derived KPIs from previous step ----- */
   const isBrandView = persona.title === 'Brand/Category Manager';
-  const TIME_PERIODS = ['2025 YTD', '2024 YTD'] as const;
-  const CATS = ['Chocolate', 'Fruity', 'Gum', 'Mint'] as const;
-
-  const [timePeriodB, setTimePeriodB] = useState<typeof TIME_PERIODS[number]>('2025 YTD');
-  const [categoryB, setCategoryB] = useState<typeof CATS[number]>('Chocolate');
-  const brandOptions = useMemo(() => BRAND_PAGE[timePeriodB][categoryB].brands.map(b => b.name), [timePeriodB, categoryB]);
-  const [brands, setBrands] = useState<string[]>(brandOptions);
-  useEffect(() => { setBrands(brandOptions); }, [brandOptions]);
 
   const catBlock = BRAND_PAGE[timePeriodB][categoryB];
   const selectedRows = useMemo(() => catBlock.brands.filter(b => brands.includes(b.name)), [catBlock.brands, brands]);
@@ -517,9 +530,6 @@ export const PersonaWelcome = () => {
 
   /* ----- Search view: filters, KPIs & charts ----- */
   const isSearchView = persona.title === 'Search Manager';
-  const SEARCH_CUSTOMERS = ['Amazon', 'Walmart', 'Target', 'Instacart', 'DoorDash'] as const;
-  const [searchCustomer, setSearchCustomer] = useState<typeof SEARCH_CUSTOMERS[number]>('Amazon');
-  const [searchPeriod, setSearchPeriod] = useState<typeof TIME_PERIODS[number]>('2025 YTD');
 
   const searchBlock: SearchBlock = (SEARCH_DATA as any)[searchCustomer]?.[searchPeriod] ?? SEARCH_DATA.Amazon['2025 YTD'];
 
