@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { KPICard } from './KPICard';
 import {
   User, Users, Building2, Crown, TrendingUp, Sparkles,
@@ -199,6 +200,8 @@ const changeColor = (v: number) => (v >= 0 ? 'text-success' : 'text-danger');
 export const PersonaWelcome = () => {
   const navigate = useNavigate();
   const [selectedPersona, setSelectedPersona] = useState<keyof typeof personas | null>(null);
+  const [selectedCustomer, setSelectedCustomer] = useState('All Customers');
+  const [selectedTimePeriod, setSelectedTimePeriod] = useState('YTD 2024');
 
   if (!selectedPersona) {
     return (
@@ -275,6 +278,45 @@ export const PersonaWelcome = () => {
           </Button>
         </div>
       </Card>
+
+      {/* KAM-only: Filters */}
+      {persona.title === 'Key Account Manager' && (
+        <Card className="p-4 bg-gradient-glow border-mars-blue-secondary shadow-card">
+          <div className="flex flex-wrap items-center gap-4">
+            <div className="flex items-center gap-2">
+              <label className="text-sm font-medium">Customer:</label>
+              <Select value={selectedCustomer} onValueChange={setSelectedCustomer}>
+                <SelectTrigger className="w-[180px] bg-card border-border">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-card border-border z-50">
+                  <SelectItem value="All Customers">All Customers</SelectItem>
+                  <SelectItem value="Amazon">Amazon</SelectItem>
+                  <SelectItem value="Walmart">Walmart</SelectItem>
+                  <SelectItem value="Target">Target</SelectItem>
+                  <SelectItem value="Kroger">Kroger</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex items-center gap-2">
+              <label className="text-sm font-medium">Time Period:</label>
+              <Select value={selectedTimePeriod} onValueChange={setSelectedTimePeriod}>
+                <SelectTrigger className="w-[160px] bg-card border-border">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-card border-border z-50">
+                  <SelectItem value="YTD 2024">YTD 2024</SelectItem>
+                  <SelectItem value="Q4 2024">Q4 2024</SelectItem>
+                  <SelectItem value="Q3 2024">Q3 2024</SelectItem>
+                  <SelectItem value="Q2 2024">Q2 2024</SelectItem>
+                  <SelectItem value="Q1 2024">Q1 2024</SelectItem>
+                  <SelectItem value="Full Year 2023">Full Year 2023</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </Card>
+      )}
 
       {/* KPI Tiles */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
