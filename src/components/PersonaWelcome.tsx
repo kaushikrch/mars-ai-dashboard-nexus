@@ -1,11 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { KPICard } from './KPICard';
 import {
   User, Users, Building2, Crown, TrendingUp, Sparkles,
@@ -13,7 +12,7 @@ import {
 } from 'lucide-react';
 import {
   ResponsiveContainer, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend,
-  PieChart, Pie, Cell, BarChart, Bar
+  PieChart, Pie, Cell, BarChart, Bar, ComposedChart
 } from 'recharts';
 
 const EXEC_DASHBOARD_ROUTE = '/dashboard/executive'; // adjust if your route differs
@@ -29,7 +28,7 @@ type PersonaDef = {
   aiSummary: { working: string; action: string; narrative: string };
 };
 
-// --- Personas to show on the Welcome page ---
+// ---------- Personas (KAM & others unchanged; Brand view is overridden below) ----------
 const personas: Record<string, PersonaDef> = {
   'Executive Leadership': {
     title: 'Executive Leadership',
@@ -49,9 +48,9 @@ const personas: Record<string, PersonaDef> = {
       { month: 'Oct', performance: 96, target: 88 }
     ],
     aiSummary: {
-      working: 'Exceptional business momentum with growth significantly ahead of plan.',
-      action: 'Accelerate strategic initiatives while focusing on Amazon velocity recovery.',
-      narrative: 'Digital-first execution is driving market share gains and revenue growth.'
+      working: 'Exceptional business momentum with growth ahead of plan.',
+      action: 'Accelerate initiatives; focus Amazon velocity recovery.',
+      narrative: 'Digital-first execution is compounding market share gains.'
     }
   },
   'Brand/Category Manager': {
@@ -59,11 +58,12 @@ const personas: Record<string, PersonaDef> = {
     description: 'Brand portfolio performance and category insights',
     icon: Crown,
     color: 'hsl(var(--success))',
+    // metrics here are unused; the Brand view renders a custom layout below
     metrics: [
-      { label: 'Brand Share', value: '18.2%', change: '+1.4pts', status: 'success', target: '17.5%' },
-      { label: 'Innovation Revenue', value: '$2.8M', change: '+45%', status: 'success', target: '$2.5M' },
-      { label: 'Media Efficiency', value: '4.2x', change: '+35%', status: 'success', target: '3.8x' },
-      { label: 'Consumer Sentiment', value: '89%', change: '+3%', status: 'success', target: '87%' }
+      { label: '—', value: '—', change: '—', status: 'neutral', target: '—' },
+      { label: '—', value: '—', change: '—', status: 'neutral', target: '—' },
+      { label: '—', value: '—', change: '—', status: 'neutral', target: '—' },
+      { label: '—', value: '—', change: '—', status: 'neutral', target: '—' }
     ],
     chartData: [
       { month: 'Jul', performance: 88, target: 85 },
@@ -72,9 +72,9 @@ const personas: Record<string, PersonaDef> = {
       { month: 'Oct', performance: 95, target: 88 }
     ],
     aiSummary: {
-      working: 'Gum category momentum accelerating with microseason strategy.',
-      action: 'Reallocate underperforming chocolate media to high-ROI gum.',
-      narrative: 'Portfolio strategy is working; accelerate seasonal innovations.'
+      working: 'Gum momentum via microseason; strong innovation ROI.',
+      action: 'Shift underperforming chocolate media to high-ROI gum.',
+      narrative: 'Portfolio is healthy; accelerate seasonal innovations.'
     }
   },
   'Key Account Manager': {
@@ -82,7 +82,6 @@ const personas: Record<string, PersonaDef> = {
     description: 'Retailer-focused performance and relationship management',
     icon: Building2,
     color: 'hsl(var(--primary))',
-    // ---- UPDATED TILES ----
     metrics: [
       { label: 'Customer GSV YTD', value: '$12.3M', change: 'vs LY', status: 'success', target: '$11.8M' },
       { label: 'GSV % Change YoY', value: '+24%', change: 'Target: +20%', status: 'success', target: '+20%' },
@@ -119,9 +118,9 @@ const personas: Record<string, PersonaDef> = {
       { month: 'Oct', performance: 90, target: 86 }
     ],
     aiSummary: {
-      working: 'Microseason keywords drive majority of incremental SOS gains.',
-      action: 'Shift budget to top 20 converting keywords; prune low-ROAS tail.',
-      narrative: 'Search hygiene and microseasoning are compounding SOS.'
+      working: 'Microseason keywords drive majority of SOS gains.',
+      action: 'Shift to top 20 converting keywords; prune long tail.',
+      narrative: 'Search hygiene + microseasoning compounding SOS.'
     }
   },
   'Media Manager': {
@@ -143,149 +142,171 @@ const personas: Record<string, PersonaDef> = {
     ],
     aiSummary: {
       working: 'Retail media ROAS ahead of plan with optimized lower-funnel.',
-      action: 'Test creative variants on top SKUs to lift CTR by 8–10%.',
-      narrative: 'Media cadence is efficient; expand in winning placements.'
+      action: 'Test creative variants to lift CTR by 8–10%.',
+      narrative: 'Media cadence efficient; expand in winning placements.'
     }
   }
 };
 
-// Competitor DCom share grid values (example demo data)
-const DCOM_COMP = [
-  {
-    name: 'Hershey',
-    Total:  { share: 28.7, change: +0.1, growth: 21.49 },
-    Chocolate: { share: 41.1, change: +0.7, growth: 23.97 },
-    Fruity: { share: 10.6, change: -1.0, growth: 12.14 },
-    Gum: { share: 14.6, change: -1.1, growth: 0.14 },
-    Mint: { share: 20.4, change: +2.2, growth: 14.73 }
-  },
-  {
-    name: 'Ferraro',
-    Total:  { share: 10.2, change: +0.1, growth: 16.27 },
-    Chocolate: { share: 5.5, change: -0.7, growth: 8.06 },
-    Fruity: { share: 19.2, change: +1.4, growth: 32.77 },
-    Gum: { share: 11.7, change: -6.4, growth: -30.30 },
-    Mint: { share: 11.8, change: -6.9, growth: -35.42 }
-  },
-  {
-    name: 'Lindt',
-    Total:  { share: 9.4, change: -0.3, growth: 16.75 },
-    Chocolate: { share: 16.2, change: -0.7, growth: 19.06 },
-    Fruity: { share: 7.7, change: -0.7, growth: 13.39 },
-    Gum: { share: 4.0, change: -1.7, growth: -24.18 },
-    Mint: { share: 4.8, change: -2.9, growth: -36.07 }
-  }
-];
+// ---------------- Brand/Category datasets (demo) -----------------
+type BrandRow = { name: string; gsvM: number; yoyPct: number; dcomSharePct: number; shareChangePct: number };
+type CatBlock = {
+  brands: BrandRow[];
+  gsvTargetM: number;
+  marketSharePct: number;
+  categoryGrowthPct: number;
+  totalSharePct: number;        // used for "DCom Share" tile (demo)
+  totalShareChangePct: number;  // used for tile below
+};
+type BrandData = Record<'Chocolate' | 'Fruity' | 'Gum' | 'Mint', CatBlock>;
+type BrandPageData = Record<'2025 YTD' | '2024 YTD', BrandData>;
 
-// ---- KAM Data by Customer and Time Period ----
-const KAM_DATA = {
-  'All Customers': {
-    '2025 YTD': {
-      metrics: [
-        { label: 'Customer GSV YTD', value: '$12.3M', change: 'vs LY', status: 'success', target: '$11.8M' },
-        { label: 'GSV % Change YoY', value: '+24%', change: 'Target: +20%', status: 'success', target: '+20%' },
-        { label: 'Online Share', value: '23%', change: '+2.3 pts', status: 'success', target: '≥22%' },
-        { label: 'Customer Market Share', value: '18.2%', change: '+0.8 pts', status: 'success', target: '19.0%' }
+const BRAND_PAGE: BrandPageData = {
+  '2025 YTD': {
+    Chocolate: {
+      brands: [
+        { name: 'Brand 1', gsvM: 82, yoyPct: 5,  dcomSharePct: 12, shareChangePct: 0.6 },
+        { name: 'Brand 2', gsvM: 31, yoyPct: 18, dcomSharePct: 8,  shareChangePct: 0.4 },
+        { name: 'Brand 3', gsvM: 25, yoyPct: -7, dcomSharePct: 5,  shareChangePct: -0.3 },
+        { name: 'Brand 4', gsvM: 74, yoyPct: 12, dcomSharePct: 10, shareChangePct: 0.5 }
       ],
-      categoryMix: [
-        { name: 'Chocolate', value: 42, yoy: 14, rank: 1 },
-        { name: 'Fruity', value: 25, yoy: 9, rank: 2 },
-        { name: 'Gum', value: 18, yoy: 4, rank: 3 },
-        { name: 'Mint', value: 15, yoy: 7, rank: 4 },
-      ],
-      customerShare: [
-        { customer: 'Amazon', Chocolate: 48, Fruity: 22, Gum: 12, Mint: 18 },
-        { customer: 'Walmart', Chocolate: 38, Fruity: 28, Gum: 19, Mint: 15 },
-        { customer: 'Target', Chocolate: 44, Fruity: 26, Gum: 18, Mint: 12 },
-        { customer: 'Kroger', Chocolate: 38, Fruity: 24, Gum: 22, Mint: 16 },
-      ]
+      gsvTargetM: 200,
+      marketSharePct: 22.1,
+      categoryGrowthPct: 8.4,
+      totalSharePct: 18.2,
+      totalShareChangePct: 1.4
     },
-    '2024 YTD': {
-      metrics: [
-        { label: 'Customer GSV YTD', value: '$11.8M', change: 'vs LY', status: 'success', target: '$11.0M' },
-        { label: 'GSV % Change YoY', value: '+18%', change: 'Target: +15%', status: 'success', target: '+15%' },
-        { label: 'Online Share', value: '21%', change: '+1.8 pts', status: 'success', target: '≥20%' },
-        { label: 'Customer Market Share', value: '17.4%', change: '+0.6 pts', status: 'success', target: '18.0%' }
+    Fruity: {
+      brands: [
+        { name: 'Brand A', gsvM: 34, yoyPct: 9,  dcomSharePct: 10, shareChangePct: 0.5 },
+        { name: 'Brand B', gsvM: 22, yoyPct: 6,  dcomSharePct: 7,  shareChangePct: 0.2 },
+        { name: 'Brand C', gsvM: 18, yoyPct: -2, dcomSharePct: 5,  shareChangePct: -0.1 },
+        { name: 'Brand D', gsvM: 26, yoyPct: 11, dcomSharePct: 8,  shareChangePct: 0.6 }
       ],
-      categoryMix: [
-        { name: 'Chocolate', value: 45, yoy: 12, rank: 1 },
-        { name: 'Fruity', value: 23, yoy: 8, rank: 2 },
-        { name: 'Gum', value: 17, yoy: 3, rank: 3 },
-        { name: 'Mint', value: 15, yoy: 5, rank: 4 },
+      gsvTargetM: 120,
+      marketSharePct: 14.0,
+      categoryGrowthPct: 6.1,
+      totalSharePct: 12.4,
+      totalShareChangePct: 0.7
+    },
+    Gum: {
+      brands: [
+        { name: 'FreshCo', gsvM: 28, yoyPct: 15, dcomSharePct: 16, shareChangePct: 1.2 },
+        { name: 'ChewMax', gsvM: 19, yoyPct: 12, dcomSharePct: 12, shareChangePct: 0.9 },
+        { name: 'PopMint', gsvM: 14, yoyPct: 6,  dcomSharePct: 9,  shareChangePct: 0.3 },
+        { name: 'ZapGum',  gsvM: 11, yoyPct: -3, dcomSharePct: 7,  shareChangePct: -0.2 }
       ],
-      customerShare: [
-        { customer: 'Amazon', Chocolate: 46, Fruity: 20, Gum: 14, Mint: 20 },
-        { customer: 'Walmart', Chocolate: 42, Fruity: 25, Gum: 18, Mint: 15 },
-        { customer: 'Target', Chocolate: 48, Fruity: 24, Gum: 16, Mint: 12 },
-        { customer: 'Kroger', Chocolate: 44, Fruity: 23, Gum: 19, Mint: 14 },
-      ]
+      gsvTargetM: 90,
+      marketSharePct: 20.5,
+      categoryGrowthPct: 9.0,
+      totalSharePct: 15.9,
+      totalShareChangePct: 0.9
+    },
+    Mint: {
+      brands: [
+        { name: 'CoolMint',  gsvM: 21, yoyPct: 7,  dcomSharePct: 11, shareChangePct: 0.6 },
+        { name: 'Breeze',    gsvM: 16, yoyPct: 5,  dcomSharePct: 8,  shareChangePct: 0.3 },
+        { name: 'IcyBlast',  gsvM: 12, yoyPct: -4, dcomSharePct: 6,  shareChangePct: -0.2 },
+        { name: 'FreshMint', gsvM: 25, yoyPct: 10, dcomSharePct: 12, shareChangePct: 0.4 }
+      ],
+      gsvTargetM: 75,
+      marketSharePct: 16.4,
+      categoryGrowthPct: 5.2,
+      totalSharePct: 13.9,
+      totalShareChangePct: 0.8
     }
   },
-  'Amazon': {
-    '2025 YTD': {
-      metrics: [
-        { label: 'Customer GSV YTD', value: '$3.8M', change: 'vs LY', status: 'warning', target: '$4.2M' },
-        { label: 'GSV % Change YoY', value: '+8%', change: 'Target: +20%', status: 'warning', target: '+20%' },
-        { label: 'Online Share', value: '56%', change: '+1.2 pts', status: 'success', target: '≥55%' },
-        { label: 'Customer Market Share', value: '16.5%', change: '-0.3 pts', status: 'warning', target: '17.0%' }
+  '2024 YTD': {
+    Chocolate: {
+      brands: [
+        { name: 'Brand 1', gsvM: 75, yoyPct: 3,  dcomSharePct: 11, shareChangePct: 0.3 },
+        { name: 'Brand 2', gsvM: 28, yoyPct: 10, dcomSharePct: 7,  shareChangePct: 0.2 },
+        { name: 'Brand 3', gsvM: 24, yoyPct: -4, dcomSharePct: 5,  shareChangePct: -0.1 },
+        { name: 'Brand 4', gsvM: 66, yoyPct: 9,  dcomSharePct: 9,  shareChangePct: 0.3 }
       ],
-      categoryMix: [
-        { name: 'Chocolate', value: 48, yoy: 6, rank: 1 },
-        { name: 'Fruity', value: 22, yoy: 12, rank: 2 },
-        { name: 'Gum', value: 12, yoy: -2, rank: 4 },
-        { name: 'Mint', value: 18, yoy: 8, rank: 3 },
+      gsvTargetM: 185,
+      marketSharePct: 21.0,
+      categoryGrowthPct: 5.0,
+      totalSharePct: 17.2,
+      totalShareChangePct: 0.5
+    },
+    Fruity: {
+      brands: [
+        { name: 'Brand A', gsvM: 30, yoyPct: 5,  dcomSharePct: 9, shareChangePct: 0.3 },
+        { name: 'Brand B', gsvM: 20, yoyPct: 4,  dcomSharePct: 6, shareChangePct: 0.1 },
+        { name: 'Brand C', gsvM: 17, yoyPct: -1, dcomSharePct: 5, shareChangePct: -0.1 },
+        { name: 'Brand D', gsvM: 22, yoyPct: 8,  dcomSharePct: 7, shareChangePct: 0.4 }
       ],
-      customerShare: [
-        { customer: 'Amazon', Chocolate: 48, Fruity: 22, Gum: 12, Mint: 18 },
-      ]
-    }
-  },
-  'Walmart': {
-    '2025 YTD': {
-      metrics: [
-        { label: 'Customer GSV YTD', value: '$4.2M', change: 'vs LY', status: 'success', target: '$3.8M' },
-        { label: 'GSV % Change YoY', value: '+32%', change: 'Target: +20%', status: 'success', target: '+20%' },
-        { label: 'Online Share', value: '18%', change: '+3.2 pts', status: 'success', target: '≥15%' },
-        { label: 'Customer Market Share', value: '19.8%', change: '+1.4 pts', status: 'success', target: '19.0%' }
+      gsvTargetM: 110,
+      marketSharePct: 13.2,
+      categoryGrowthPct: 4.0,
+      totalSharePct: 11.6,
+      totalShareChangePct: 0.3
+    },
+    Gum: {
+      brands: [
+        { name: 'FreshCo', gsvM: 24, yoyPct: 8,  dcomSharePct: 14, shareChangePct: 0.5 },
+        { name: 'ChewMax', gsvM: 18, yoyPct: 6,  dcomSharePct: 11, shareChangePct: 0.4 },
+        { name: 'PopMint', gsvM: 13, yoyPct: 2,  dcomSharePct: 8,  shareChangePct: 0.1 },
+        { name: 'ZapGum',  gsvM: 12, yoyPct: -2, dcomSharePct: 7,  shareChangePct: -0.1 }
       ],
-      categoryMix: [
-        { name: 'Chocolate', value: 38, yoy: 18, rank: 1 },
-        { name: 'Fruity', value: 28, yoy: 15, rank: 2 },
-        { name: 'Gum', value: 19, yoy: 8, rank: 3 },
-        { name: 'Mint', value: 15, yoy: 12, rank: 4 },
+      gsvTargetM: 80,
+      marketSharePct: 19.1,
+      categoryGrowthPct: 3.5,
+      totalSharePct: 14.8,
+      totalShareChangePct: 0.3
+    },
+    Mint: {
+      brands: [
+        { name: 'CoolMint',  gsvM: 19, yoyPct: 3,  dcomSharePct: 10, shareChangePct: 0.2 },
+        { name: 'Breeze',    gsvM: 15, yoyPct: 3,  dcomSharePct: 7,  shareChangePct: 0.1 },
+        { name: 'IcyBlast',  gsvM: 12, yoyPct: -3, dcomSharePct: 6,  shareChangePct: -0.1 },
+        { name: 'FreshMint', gsvM: 22, yoyPct: 6,  dcomSharePct: 10, shareChangePct: 0.2 }
       ],
-      customerShare: [
-        { customer: 'Walmart', Chocolate: 38, Fruity: 28, Gum: 19, Mint: 15 },
-      ]
+      gsvTargetM: 70,
+      marketSharePct: 15.6,
+      categoryGrowthPct: 2.8,
+      totalSharePct: 12.9,
+      totalShareChangePct: 0.2
     }
   }
 };
 
-const PIE_COLORS = ['hsl(var(--primary))', 'hsl(var(--success))', 'hsl(var(--warning))', 'hsl(var(--danger))'];
+const PIE_COLORS = ['#7c3aed', '#f59e0b', '#10b981', '#0ea5e9'];
+const asMoneyM = (v: number) => `$${v.toLocaleString(undefined, { maximumFractionDigits: 1 })}M`;
+const trendType = (v: number): 'positive' | 'negative' | 'neutral' => (v > 0 ? 'positive' : v < 0 ? 'negative' : 'neutral');
+
+// ---- KAM-only helpers/data (from prior step) ----
+const KAM_CATEGORY_MIX = [
+  { name: 'Chocolate', value: 52, yoy: 14, rank: 1 },
+  { name: 'Fruity', value: 26, yoy: 9,  rank: 2 },
+  { name: 'Gum',      value: 15, yoy: 4,  rank: 3 },
+  { name: 'Mint',     value: 7,  yoy: 7,  rank: 4 },
+];
+const KAM_CUSTOMER_CATEGORY_SHARE = [
+  { category: 'Chocolate', Walmart: 22, Target: 18, Amazon: 16, Kroger: 12 },
+  { category: 'Fruity',    Walmart: 19, Target: 17, Amazon: 14, Kroger: 10 },
+  { category: 'Gum',       Walmart: 11, Target: 9,  Amazon: 7,  Kroger: 6  },
+  { category: 'Mint',      Walmart: 13, Target: 10, Amazon: 8,  Kroger: 7  },
+];
+const DCOM_COMP = [
+  { name: 'Hershey', Total:  { share: 28.7, change: +0.1, growth: 21.49 }, Chocolate: { share: 41.1, change: +0.7, growth: 23.97 }, Fruity: { share: 10.6, change: -1.0, growth: 12.14 }, Gum: { share: 14.6, change: -1.1, growth: 0.14 }, Mint: { share: 20.4, change: +2.2, growth: 14.73 } },
+  { name: 'Ferrero/Ferrara', Total:  { share: 10.2, change: +0.1, growth: 16.27 }, Chocolate: { share: 5.5, change: -0.7, growth: 8.06 }, Fruity: { share: 19.2, change: +1.4, growth: 32.77 }, Gum: { share: 11.7, change: -6.4, growth: -30.30 }, Mint: { share: 11.8, change: -6.9, growth: -35.42 } },
+  { name: 'Lindt', Total:  { share: 9.4, change: -0.3, growth: 16.75 }, Chocolate: { share: 16.2, change: -0.7, growth: 19.06 }, Fruity: { share: 7.7, change: -0.7, growth: 13.39 }, Gum: { share: 4.0, change: -1.7, growth: -24.18 }, Mint: { share: 4.8, change: -2.9, growth: -36.07 } }
+];
 
 const changeColor = (v: number) => (v >= 0 ? 'text-success' : 'text-danger');
 
+// ----------------------------------------------------------------
+
 export const PersonaWelcome = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [selectedPersona, setSelectedPersona] = useState<keyof typeof personas | null>(null);
-  const [selectedCustomer, setSelectedCustomer] = useState('All Customers');
-  const [selectedTimePeriod, setSelectedTimePeriod] = useState('2025 YTD');
 
-  // Get dynamic data based on filters
-  const getKAMData = () => {
-    const customerData = KAM_DATA[selectedCustomer as keyof typeof KAM_DATA];
-    if (!customerData) return KAM_DATA['All Customers']['2025 YTD'];
-    
-    const timeData = customerData[selectedTimePeriod as keyof typeof customerData];
-    return timeData || customerData['2025 YTD'] || KAM_DATA['All Customers']['2025 YTD'];
-  };
-
-  const kamData = getKAMData();
-
+  // ---------- Welcome Screen ----------
   if (!selectedPersona) {
     return (
       <div className="space-y-6 animate-slide-up">
-        {/* Header */}
         <Card className="p-6 bg-gradient-glow border-mars-blue-secondary shadow-card">
           <div className="flex items-center gap-4">
             <User className="h-8 w-8" />
@@ -296,14 +317,13 @@ export const PersonaWelcome = () => {
           </div>
         </Card>
 
-        {/* Persona Selection Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
           {Object.entries(personas).map(([key, persona]) => (
             <Card
               key={key}
               className="p-6 bg-gradient-glow border-mars-blue-secondary shadow-card cursor-pointer hover:shadow-glow hover:scale-105 transition-all duration-300"
               onClick={() => {
-                if (key === 'Executive Leadership') navigate(EXEC_DASHBOARD_ROUTE);
+                if (key === 'Executive Leadership') router.push(EXEC_DASHBOARD_ROUTE);
                 else setSelectedPersona(key as keyof typeof personas);
               }}
             >
@@ -337,6 +357,39 @@ export const PersonaWelcome = () => {
   // ---------- Persona Dashboard ----------
   const persona = personas[selectedPersona];
 
+  // SPECIALIZED BRAND/CATEGORY VIEW
+  const isBrandView = persona.title === 'Brand/Category Manager';
+
+  // Brand filters & derived metrics
+  const TIME_PERIODS = ['2025 YTD', '2024 YTD'] as const;
+  const CATS = ['Chocolate', 'Fruity', 'Gum', 'Mint'] as const;
+
+  const [timePeriod, setTimePeriod] = useState<typeof TIME_PERIODS[number]>('2025 YTD');
+  const [category, setCategory] = useState<typeof CATS[number]>('Chocolate');
+  const brandOptions = useMemo(() => BRAND_PAGE[timePeriod][category].brands.map(b => b.name), [timePeriod, category]);
+  const [brands, setBrands] = useState<string[]>(brandOptions);
+
+  useEffect(() => { setBrands(brandOptions); }, [brandOptions]);
+
+  const catBlock = BRAND_PAGE[timePeriod][category];
+  const selectedRows = useMemo(
+    () => catBlock.brands.filter(b => brands.includes(b.name)),
+    [catBlock.brands, brands]
+  );
+
+  const gsvTotal = selectedRows.reduce((s, r) => s + r.gsvM, 0);
+  const yoyWeighted = gsvTotal > 0
+    ? selectedRows.reduce((s, r) => s + r.yoyPct * r.gsvM, 0) / gsvTotal
+    : 0;
+
+  // For demo, DCom share tile uses category-level totals
+  const dcomShare = catBlock.totalSharePct;
+  const dcomShareChangePct = catBlock.totalShareChangePct;
+
+  // Market share tile (category-level)
+  const marketShare = catBlock.marketSharePct;
+  const catGrowthRate = catBlock.categoryGrowthPct;
+
   return (
     <div className="space-y-6 animate-slide-up">
       {/* Header with Back Button */}
@@ -356,168 +409,255 @@ export const PersonaWelcome = () => {
             Back to Personas
           </Button>
         </div>
+
+        {/* BRAND FILTERS */}
+        {isBrandView && (
+          <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-muted-foreground">Time Period</span>
+              <select
+                className="h-9 rounded-md border bg-background px-3 text-sm w-full"
+                value={timePeriod}
+                onChange={(e) => setTimePeriod(e.target.value as typeof TIME_PERIODS[number])}
+              >
+                {TIME_PERIODS.map(tp => <option key={tp} value={tp}>{tp}</option>)}
+              </select>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-muted-foreground">Category</span>
+              <select
+                className="h-9 rounded-md border bg-background px-3 text-sm w-full"
+                value={category}
+                onChange={(e) => setCategory(e.target.value as typeof CATS[number])}
+              >
+                {CATS.map(c => <option key={c} value={c}>{c}</option>)}
+              </select>
+            </div>
+            <div className="flex items-start gap-2">
+              <span className="text-sm text-muted-foreground min-w-[64px] mt-2">Brands</span>
+              <select
+                multiple
+                className="rounded-md border bg-background p-2 text-sm w-full h-24"
+                value={brands}
+                onChange={(e) => {
+                  const opts = Array.from(e.target.selectedOptions).map(o => o.value);
+                  setBrands(opts);
+                }}
+              >
+                {brandOptions.map(b => <option key={b} value={b}>{b}</option>)}
+              </select>
+            </div>
+          </div>
+        )}
       </Card>
 
-      {/* KAM-only: Filters */}
-      {persona.title === 'Key Account Manager' && (
-        <Card className="p-4 bg-gradient-glow border-mars-blue-secondary shadow-card">
-          <div className="flex flex-wrap items-center gap-4">
-            <div className="flex items-center gap-2">
-              <label className="text-sm font-medium">Customer:</label>
-              <Select value={selectedCustomer} onValueChange={setSelectedCustomer}>
-                <SelectTrigger className="w-[180px] bg-card border-border">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent className="bg-card border-border z-50">
-                  <SelectItem value="All Customers">All Customers</SelectItem>
-                  <SelectItem value="Amazon">Amazon</SelectItem>
-                  <SelectItem value="Walmart">Walmart</SelectItem>
-                  <SelectItem value="Target">Target</SelectItem>
-                  <SelectItem value="Kroger">Kroger</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="flex items-center gap-2">
-              <label className="text-sm font-medium">Time Period:</label>
-              <Select value={selectedTimePeriod} onValueChange={setSelectedTimePeriod}>
-                <SelectTrigger className="w-[160px] bg-card border-border">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent className="bg-card border-border z-50">
-                  <SelectItem value="2025 YTD">2025 YTD</SelectItem>
-                  <SelectItem value="2024 YTD">2024 YTD</SelectItem>
-                  <SelectItem value="Q4 2024">Q4 2024</SelectItem>
-                  <SelectItem value="Q3 2024">Q3 2024</SelectItem>
-                  <SelectItem value="Q2 2024">Q2 2024</SelectItem>
-                  <SelectItem value="Q1 2024">Q1 2024</SelectItem>
-                  <SelectItem value="Full Year 2023">Full Year 2023</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        </Card>
-      )}
-
-      {/* KPI Tiles */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {(persona.title === 'Key Account Manager' ? kamData.metrics : persona.metrics).map((metric, index) => (
-          <Card key={index} className="p-6 bg-gradient-glow border-mars-blue-secondary shadow-card">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">{metric.label}</p>
-              <p className="text-2xl font-bold">{metric.value}</p>
-              <div className="flex items-center gap-2">
-                <Badge
-                  className={
-                    metric.status === 'success'
-                      ? 'bg-success/20 text-success'
-                      : metric.status === 'warning'
-                      ? 'bg-warning/20 text-warning'
-                      : 'bg-muted text-muted-foreground'
-                  }
-                >
-                  {metric.change}
-                </Badge>
-                <p className="text-xs text-muted-foreground">Target: {metric.target}</p>
-              </div>
-            </div>
-          </Card>
-        ))}
-      </div>
-
-      {/* KAM-only: Category Performance Snapshot (Pie) */}
-      {persona.title === 'Key Account Manager' && (
-        <Card className="p-6 bg-gradient-glow border-mars-blue-secondary shadow-card">
-          <h3 className="font-semibold mb-4">Category Performance Snapshot</h3>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie dataKey="value" data={kamData.categoryMix} innerRadius={48} outerRadius={90} paddingAngle={2}>
-                    {kamData.categoryMix.map((_, i) => <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />)}
-                  </Pie>
-                  <Tooltip formatter={(v: any) => [`${v}%`, '% of Business']} />
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              {kamData.categoryMix.map((c) => (
-                <div key={c.name} className="p-3 rounded-lg bg-muted/30">
-                  <p className="text-sm font-medium">{c.name}</p>
-                  <p className="text-xl font-bold">{c.value}%</p>
-                  <p className={`text-xs ${c.yoy >= 0 ? 'text-success' : 'text-danger'}`}>YoY: {c.yoy >= 0 ? '+' : ''}{c.yoy}%</p>
-                  <p className="text-xs text-muted-foreground">Rank: {c.rank}</p>
+      {/* BRAND KPIs */}
+      {isBrandView ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <KPICard
+            title="DCom Share"
+            value={`${dcomShare.toFixed(1)}%`}
+            change={`${dcomShareChangePct >= 0 ? '+' : ''}${dcomShareChangePct.toFixed(1)}%`}
+            changeType={trendType(dcomShareChangePct)}
+            icon="target"
+            subtitle={`Total Share: ${dcomShare.toFixed(1)}%`}
+          />
+          <KPICard
+            title="GSV YTD"
+            value={asMoneyM(gsvTotal)}
+            change=" "
+            changeType="neutral"
+            icon="dollar"
+            subtitle={`Target: ${asMoneyM(catBlock.gsvTargetM)}`}
+          />
+          <KPICard
+            title="GSV YoY% Change"
+            value={`${yoyWeighted.toFixed(1)}%`}
+            change="vs LY"
+            changeType={trendType(yoyWeighted)}
+            icon="target"
+            subtitle=" "
+          />
+          <KPICard
+            title="Market Share"
+            value={`${marketShare.toFixed(1)}%`}
+            change={`${catGrowthRate >= 0 ? '+' : ''}${catGrowthRate.toFixed(1)}%`}
+            changeType={trendType(catGrowthRate)}
+            icon="users"
+            subtitle="Category Growth Rate"
+          />
+        </div>
+      ) : (
+        // Non-brand personas keep their generic tiles
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {persona.metrics.map((metric, index) => (
+            <Card key={index} className="p-6 bg-gradient-glow border-mars-blue-secondary shadow-card">
+              <div className="space-y-2">
+                <p className="text-sm text-muted-foreground">{metric.label}</p>
+                <p className="text-2xl font-bold">{metric.value}</p>
+                <div className="flex items-center gap-2">
+                  <Badge
+                    className={
+                      metric.status === 'success'
+                        ? 'bg-success/20 text-success'
+                        : metric.status === 'warning'
+                        ? 'bg-warning/20 text-warning'
+                        : 'bg-muted text-muted-foreground'
+                    }
+                  >
+                    {metric.change}
+                  </Badge>
+                  <p className="text-xs text-muted-foreground">Target: {metric.target}</p>
                 </div>
-              ))}
-            </div>
+              </div>
+            </Card>
+          ))}
+        </div>
+      )}
+
+      {/* BRAND: Performance by Brands (GSV + YoY%) */}
+      {isBrandView && (
+        <Card className="p-6 bg-gradient-glow border-mars-blue-secondary shadow-card">
+          <h3 className="font-semibold mb-4">Performance by Brands — {category}</h3>
+          <div className="h-80">
+            <ResponsiveContainer width="100%" height="100%">
+              <ComposedChart data={selectedRows}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis yAxisId="left" tickFormatter={(v) => `$${v}M`} />
+                <YAxis yAxisId="right" orientation="right" tickFormatter={(v) => `${v}%`} />
+                <Tooltip formatter={(val: any, name: string) => name.includes('YoY') ? [`${val}%`, name] : [`$${val}M`, name]} />
+                <Legend />
+                <Bar yAxisId="left" dataKey="gsvM" name="GSV (M)" radius={[6,6,0,0]} />
+                <Line yAxisId="right" type="monotone" dataKey="yoyPct" name="YoY % Change" strokeWidth={3} dot />
+              </ComposedChart>
+            </ResponsiveContainer>
           </div>
         </Card>
       )}
 
-      {/* Chart: Market Share by Retailer across Categories */}
+      {/* GENERIC: Performance Trends (kept after the brand chart) */}
       <Card className="p-6 bg-gradient-glow border-mars-blue-secondary shadow-card">
         <h3 className="font-semibold mb-4 flex items-center gap-2">
           <BarChart3 className="h-5 w-5 text-primary" />
-          Market Share by Retailer
+          Performance Trends — {persona.title}
         </h3>
-        <div className="h-80">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={kamData.customerShare} barGap={6}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="customer" />
-              <YAxis tickFormatter={(v) => `${v}%`} />
-              <Tooltip formatter={(v: any) => [`${v}%`, 'Market Share']} />
-              <Legend />
-              <Bar dataKey="Chocolate" fill="hsl(var(--primary))" radius={[6, 6, 0, 0]} />
-              <Bar dataKey="Fruity" fill="hsl(var(--success))" radius={[6, 6, 0, 0]} />
-              <Bar dataKey="Gum" fill="hsl(var(--warning))" radius={[6, 6, 0, 0]} />
-              <Bar dataKey="Mint" fill="hsl(var(--danger))" radius={[6, 6, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
+        <ResponsiveContainer width="100%" height={300}>
+          <LineChart data={persona.chartData}>
+            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+            <XAxis dataKey="month" stroke="hsl(var(--foreground))" />
+            <YAxis stroke="hsl(var(--foreground))" />
+            <Tooltip
+              contentStyle={{
+                backgroundColor: 'hsl(var(--card))',
+                border: '1px solid hsl(var(--border))',
+                borderRadius: '8px'
+              }}
+            />
+            <Legend />
+            <Line type="monotone" dataKey="performance" stroke="hsl(var(--primary))" strokeWidth={3} name="Performance Index" />
+            <Line type="monotone" dataKey="target" stroke="hsl(var(--success))" strokeWidth={2} strokeDasharray="5 5" name="Target" />
+          </LineChart>
+        </ResponsiveContainer>
       </Card>
 
-      {/* DCom Share vs Competitors */}
-      <Card className="p-6 bg-gradient-glow border-mars-blue-secondary shadow-card">
-        <h3 className="font-semibold mb-4">DCom Share — Top Competitors</h3>
-        <div className="overflow-x-auto">
-          <table className="min-w-[720px] w-full text-sm">
-            <thead>
-              <tr className="text-left">
-                <th className="py-2 pr-4">Competitor</th>
-                <th className="py-2 px-4">Total</th>
-                <th className="py-2 px-4">Chocolate</th>
-                <th className="py-2 px-4">Fruity</th>
-                <th className="py-2 px-4">Gum</th>
-                <th className="py-2 px-4">Mint</th>
-              </tr>
-            </thead>
-            <tbody>
-              {DCOM_COMP.map((r) => (
-                <tr key={r.name} className="border-t">
-                  <td className="py-3 pr-4 font-medium">{r.name}</td>
-                  {(['Total','Chocolate','Fruity','Gum','Mint'] as const).map((k) => {
-                    const cell = r[k];
-                    return (
-                      <td key={k} className="py-3 px-4 align-top">
-                        <div className="font-semibold">{cell.share.toFixed(1)}%</div>
-                        <div className={`${changeColor(cell.change)} text-xs`}>
-                          {cell.change >= 0 ? '+' : ''}{cell.change.toFixed(1)} pts
-                        </div>
-                        <div className={`${changeColor(cell.growth)} text-xs`}>
-                          Sales Gr: {cell.growth >= 0 ? '+' : ''}{cell.growth.toFixed(2)}%
-                        </div>
-                      </td>
-                    );
-                  })}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </Card>
+      {/* KAM-only components retained from earlier step */}
+      {persona.title === 'Key Account Manager' && (
+        <>
+          {/* Category Performance Snapshot (Pie) */}
+          <Card className="p-6 bg-gradient-glow border-mars-blue-secondary shadow-card">
+            <h3 className="font-semibold mb-4">Category Performance Snapshot</h3>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="h-64">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie dataKey="value" data={KAM_CATEGORY_MIX} innerRadius={48} outerRadius={90} paddingAngle={2}>
+                      {KAM_CATEGORY_MIX.map((_, i) => <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />)}
+                    </Pie>
+                    <Tooltip formatter={(v: any) => [`${v}%`, '% of Business']} />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                {KAM_CATEGORY_MIX.map((c) => (
+                  <div key={c.name} className="p-3 rounded-lg bg-muted/30">
+                    <p className="text-sm font-medium">{c.name}</p>
+                    <p className="text-xl font-bold">{c.value}%</p>
+                    <p className={`text-xs ${c.yoy >= 0 ? 'text-success' : 'text-danger'}`}>YoY: {c.yoy >= 0 ? '+' : ''}{c.yoy}%</p>
+                    <p className="text-xs text-muted-foreground">Rank: {c.rank}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Card>
 
-      {/* AI Insights (unchanged) */}
+          {/* Category Share by Customer */}
+          <Card className="p-6 bg-gradient-glow border-mars-blue-secondary shadow-card">
+            <h3 className="font-semibold mb-4 flex items-center gap-2">
+              <BarChart3 className="h-5 w-5 text-primary" />
+              Category Share by Customer (Market Total)
+            </h3>
+            <div className="h-80">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={KAM_CUSTOMER_CATEGORY_SHARE} barGap={6}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="category" />
+                  <YAxis tickFormatter={(v) => `${v}%`} />
+                  <Tooltip formatter={(v: any) => [`${v}%`, 'Share']} />
+                  <Legend />
+                  <Bar dataKey="Walmart" radius={[6, 6, 0, 0]} />
+                  <Bar dataKey="Target" radius={[6, 6, 0, 0]} />
+                  <Bar dataKey="Amazon" radius={[6, 6, 0, 0]} />
+                  <Bar dataKey="Kroger" radius={[6, 6, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </Card>
+
+          {/* DCom Share — Competitors */}
+          <Card className="p-6 bg-gradient-glow border-mars-blue-secondary shadow-card">
+            <h3 className="font-semibold mb-4">DCom Share — Top Competitors</h3>
+            <div className="overflow-x-auto">
+              <table className="min-w-[720px] w-full text-sm">
+                <thead>
+                  <tr className="text-left">
+                    <th className="py-2 pr-4">Competitor</th>
+                    <th className="py-2 px-4">Total</th>
+                    <th className="py-2 px-4">Chocolate</th>
+                    <th className="py-2 px-4">Fruity</th>
+                    <th className="py-2 px-4">Gum</th>
+                    <th className="py-2 px-4">Mint</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {DCOM_COMP.map((r) => (
+                    <tr key={r.name} className="border-t">
+                      <td className="py-3 pr-4 font-medium">{r.name}</td>
+                      {(['Total','Chocolate','Fruity','Gum','Mint'] as const).map((k) => {
+                        const cell = (r as any)[k];
+                        return (
+                          <td key={k} className="py-3 px-4 align-top">
+                            <div className="font-semibold">{cell.share.toFixed(1)}%</div>
+                            <div className={`${changeColor(cell.change)} text-xs`}>
+                              {cell.change >= 0 ? '+' : ''}{cell.change.toFixed(1)} pts
+                            </div>
+                            <div className={`${changeColor(cell.growth)} text-xs`}>
+                              Sales Gr: {cell.growth >= 0 ? '+' : ''}{cell.growth.toFixed(2)}%
+                            </div>
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Card>
+        </>
+      )}
+
+      {/* AI-Generated Insights */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card className="p-6 bg-gradient-glow border-mars-blue-secondary shadow-card">
           <h4 className="font-semibold mb-3 text-success flex items-center gap-2">
