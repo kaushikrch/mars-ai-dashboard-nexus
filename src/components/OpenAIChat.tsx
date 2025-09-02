@@ -226,7 +226,7 @@ Provide actionable insights in a professional but accessible tone. Use data from
   }
 
   return (
-    <div className="w-96 bg-card border-l border-border min-h-screen flex flex-col">
+    <div className="w-96 bg-card border-l border-border h-[calc(100vh-6rem)] flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-mars-blue-secondary bg-muted/30">
         <div className="flex items-center gap-2">
