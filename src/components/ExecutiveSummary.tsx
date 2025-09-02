@@ -287,7 +287,9 @@ export const ExecutiveSummary = () => {
     <div className="space-y-6 animate-slide-up">
       {/* Header: Title + Filters */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <h2 className="text-2xl font-semibold tracking-tight">Executive Performance Summary</h2>
+        <div className="flex-1 flex justify-center">
+          <h2 className="text-2xl font-semibold tracking-tight text-center">Executive Performance Summary</h2>
+        </div>
 
         {/* Native selects (works everywhere). Replace with shadcn Select if desired. */}
         <div className="flex gap-3">
