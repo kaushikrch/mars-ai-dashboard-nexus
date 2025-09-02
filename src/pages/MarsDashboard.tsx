@@ -35,10 +35,10 @@ export const MarsDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white overflow-x-hidden">
       <MarsHeaderNav />
       
-      <div className="flex">
+      <div className="flex w-full">
         {!isNavCollapsed && (
           <MarsNavigation 
             activeTab={activeTab} 
@@ -48,10 +48,10 @@ export const MarsDashboard = () => {
           />
         )}
         
-        <main className={`flex-1 p-6 transition-all duration-300 ${
-          isNavCollapsed ? 'ml-0' : 'ml-[288px]'
+        <main className={`flex-1 p-6 transition-all duration-300 min-w-0 ${
+          isNavCollapsed ? 'ml-0' : 'ml-0'
         } ${
-          isChatCollapsed ? 'mr-0' : 'mr-[416px]'
+          isChatCollapsed ? 'mr-0' : 'mr-0'
         }`}>
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
             <TabsContent value="executive" className="space-y-6">
