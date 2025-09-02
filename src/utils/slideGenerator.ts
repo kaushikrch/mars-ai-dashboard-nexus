@@ -41,11 +41,87 @@ export function generateMarsSlideContent(
   const baseSlides: DeckSlide[] =
     template === 'Executive Summary'
       ? [
-          { title: 'YTD Performance Overview', content: ['GSV +16.3% vs LY', 'GSV YTD $47.2M', 'Ahead of plan YoY'] },
-          { title: 'Category Share & Competitive Position', content: ['DCom Share 18.2% (+1.4pts)', 'Leader gap -3.4pts'] },
-          { title: 'Customer Performance Snapshot', content: ['Walmart +24%', 'Target +19%', 'Amazon -8%'] },
-          { title: 'Key Strategic Initiatives', content: ['Amazon velocity recovery', 'Microseason search + media', 'Innovation pipeline acceleration'] },
-          { title: 'Investment ROI Summary', content: ['Shopper Media ROAS $4.2 (+35%)', 'Reinvest in top converting KWs'] }
+          { 
+            title: 'YTD Performance Overview', 
+            content: [
+              'GSV +16.3% vs LY',
+              'GSV YTD $47.2M', 
+              'Ahead of plan YoY'
+            ]
+          },
+          { 
+            title: 'EXECUTIVE SUMMARY',
+            content: [
+              'DIGITAL PERFORMANCE YTD P6',
+              '• YTD P6 GSV +21.1% YoY, Q2 higher due to easter shift',
+              '• YTD +21.1% GSV growth reflects restated baseline (Dcom and Uber), 2025 plan remains at $727M;',
+              '• Restatements adjusted growth target upward to +14.3%. Upcoming Kroger restatement expected to further impact numbers positively.',
+              '',
+              'CATEGORY SHARE YTD P5',
+              '• Mars DCOM Share: 24.9% P5 YTD, down (-.9 pts)',
+              '• YTD P5 Digital Share 24.9% > Total Share 24.2%',
+              '• Drivers: Chocolate, Fruity & Mint faced losses; Gum strong Growth',
+              '• Supply gaps on Amazon contributing to share loss',
+              '',
+              'CHANNEL HIGHLIGHTS YTD P6',
+              '• AMZ: +11.1% GSV YoY; Fruity & Gum strong, Post Price increase building back volume',
+              '• Walmart: +26% GSV; All Subcat growing',
+              '• Sam\'s Club: +24% GSV; Chocolate +26.2% & Gum +86.7% gains',
+              '• Target: +22.8% GSV; strong in Fruity, Gum & Mint'
+            ]
+          },
+          { 
+            title: 'KEY DRIVERS',
+            content: [
+              'DIGITAL PERFORMANCE YTD P6',
+              '• YTD P6 GSV +21% YoY, Q2 higher due to easter shift',
+              '• Across Many Top Customers, Digital sales drove more Abs $ Growth in Retail Sales than In-Store',
+              '',
+              'CATEGORY SHARE YTD P5',
+              '• Mars DCOM Share: 24.9% P5 YTD, down -.9 pts.',
+              '• YTD P5:Digital Share 24.9% > Total Share 24.2%',
+              '• Drivers: Chocolate, Fruity & Mint faced losses; Gum strong Growth',
+              '• Supply gaps on Amazon contributing to share loss',
+              '',
+              'Walmart',
+              'Drivers:',
+              '• Variety Bags +45% due to improved findability on walmart.com v LY (inclusion in VB WMC Evergreen campaign & Must Win Items), 85% of growth sourced online L4W.',
+              '• M&M\'s +21% with 100% of the growth sourcing online (inclusion in M&M\'s WMC Evergreen campaign & Must Win Items)',
+              '• 42% of digital fruity growth driven by Skittles Pop\'d',
+              '',
+              'Target',
+              'Drivers:',
+              '• YTD M&M\'s assortment gains, RWB LTO, Crispy Marshmallow Exclusive; Plus Up promo on M&M\'s Family Size and Party Size vs. YA',
+              '• Starburst Minis Candy Salad Activation in-store and online',
+              '• Skittles Pop\'d Highlights for National Ice Cream Month',
+              '',
+              'ON DEMAND DELIVERY',
+              '• ODD $36.5M +22.4% YTD* driven by DoorDash rapid organic growth into grocery verticals and Instacart latest paid search infusion.',
+              '• Instacart $17.9M GSV YTD+6.3%, P6 $3.1M +23% gaining share on Fruity with additional gummiies spend in Q2. We will likely go backwards to share loss in Q3 when comp investment without infusions.',
+              '• DoorDash $14.1M GSV YTD+34% driven primarily by organic traffic, continue to lag behind category growth led by over 100 bps.',
+              '• Uber : Data now Updated! $3.8M +35% driven by organic traffic infusion.'
+            ]
+          },
+          { 
+            title: 'BIGGEST OPPORTUNITIES ACROSS CELL & CUSTOMER INCLUDE CHOCOLATE SEARCH GAPS AT KROGER, AMAZON & SAM\'S CLUB. FRUITY ONLINE GAPS AT AMAZON GUM AT AMAZON. MINTS IS SHOWING GOOD IMPROVEMENTS',
+            content: [
+              'Chocolate',
+              'Timing: P6 Ytd, P6 Ytd, P5 Ytd, P5 Ytd, P5 Ytd, P5 Ytd',
+              'Retailer: RSV, Growth (YoY), Online Share, Share Chg, Total Share, Gap/Ahead',
+              'Amazon: $29.9M, 15.2%, 25.1%, -2.11 Pts, 23.0%, 200 Bps',
+              'DoorDash: $13.4M, 28.1%, -, -, 23.0%, -2902 Bps',
+              'Walmart: $35.0M, 29.5%, 29.9%, 0.42 Pts, 21.8%, 800 Bps',
+              'Sam\'s Club: $37.2M, 26.8%, 40.7%, 1.49 Pts, 34.5%, 638 Bps',
+              'Target: $16.9M, 20.8%, 21.8%, 0.30 Pts, 19.6%, 216 Bps',
+              'Kroger: $6.6M, 20.8%, 23.7%, 0.24 Pts, 25.3%, -164 Bps',
+              '',
+              'Gum',
+              'P6 Ytd, P6 Ytd, P5 Ytd, P5 Ytd, P5 Ytd, P5 Ytd',
+              'Amazon: $30.2M, 24.1%, 36.3%, -2.24 Pts, 59.3%, -2302 Bps',
+              'Uber: $1.8M, 51.5%, -, -, 59.3%, -950 Bps',
+              'Walmart: $15.1M, 21.2%, 62.8%, 5.08 Pts, 61.1%, 168 Bps'
+            ]
+          }
         ]
       : template === 'Brand Review'
       ? [
@@ -77,10 +153,10 @@ export function generateMarsSlideContent(
         ];
 
   const deck: DeckData = {
-    title: `Mars DCom — ${template}`,
-    subtitle: `${options.context?.timePeriod || '2025 YTD'} • ${options.audience || 'Executive'} • ${style}`,
-    author: 'Mars DCom Assistant',
-    date: new Date().toLocaleDateString(),
+    title: template === 'Executive Summary' ? 'MARS Snacking' : `Mars DCom — ${template}`,
+    subtitle: template === 'Executive Summary' ? 'Executive Summary 2025 YTD' : `${options.context?.timePeriod || '2025 YTD'} • ${options.audience || 'Executive'} • ${style}`,
+    author: 'Mars DCom AI Generated',
+    date: new Date().toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }),
     slides: baseSlides
   };
 

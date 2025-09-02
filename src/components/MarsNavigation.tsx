@@ -62,7 +62,7 @@ const navigationItems = [
 export const MarsNavigation = ({ activeTab, onTabChange, isCollapsed, onToggle }: MarsNavigationProps) => {
   if (isCollapsed) {
     return (
-      <div className="fixed left-4 top-4 z-50">
+      <div className="fixed left-4 top-20 z-50">
         <Button
           onClick={onToggle}
           className="rounded-full w-12 h-12 bg-muted hover:bg-muted/80 border shadow-lg"

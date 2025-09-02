@@ -24,7 +24,7 @@ export const OpenAIChat = ({ isCollapsed, onToggle, currentContext }: OpenAIChat
     {
       id: '1',
       role: 'assistant',
-      content: `👋 Hi! I'm your Mars DCom AI Assistant powered by GPT-4. I can help you interpret metrics, generate insights, create slide narratives, and answer questions about your performance data.
+      content: `👋 Hi! I'm your Mars DCom AI Assistant. I can help you interpret metrics, generate insights, create slide narratives, and answer questions about your performance data.
 
 Try asking me:
 • "Why is Gum performing better than Chocolate?"
