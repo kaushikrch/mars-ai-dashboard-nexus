@@ -102,7 +102,7 @@ export const MarsHeaderNav = () => {
               <User className="h-4 w-4 text-primary-foreground" />
             </div>
             <div className="hidden md:block">
-              <p className="text-sm font-medium">Sarah Chen</p>
+              <p className="text-sm font-medium">Sofia Chen</p>
               <p className="text-xs text-muted-foreground">Key Account Manager</p>
             </div>
             <MarsButton variant="ghost" size="sm">
