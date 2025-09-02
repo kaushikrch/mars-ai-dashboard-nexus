@@ -44,19 +44,36 @@ export const SlidePreview = ({ deck, onExportToPowerPoint, onExportToGoogleSlide
           
           {/* Slide Content */}
           <div className="h-full flex flex-col">
-            <div className="mb-4">
-              <h1 className="text-xl font-bold text-mars-blue-primary mb-2">{slide.title}</h1>
-              <div className="w-full h-1 bg-primary rounded"></div>
-            </div>
-            
-            <div className="flex-1 space-y-3">
-              {slide.content.map((item, index) => (
-                <div key={index} className="flex items-start gap-2">
-                  <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-                  <p className="text-sm text-mars-blue-primary">{item}</p>
+            {slide.title === 'Executive Performance Summary' ? (
+              // Centered layout for Executive Performance Summary
+              <div className="flex-1 flex flex-col justify-center items-center text-center">
+                <h1 className="text-2xl font-bold text-mars-blue-primary mb-8">{slide.title}</h1>
+                <div className="space-y-4 max-w-sm">
+                  {slide.content.map((item, index) => (
+                    <div key={index} className="p-3 bg-mars-blue-light/5 rounded-lg border border-primary/20">
+                      <p className="text-lg font-semibold text-mars-blue-primary">{item}</p>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </div>
+            ) : (
+              // Standard layout for other slides
+              <>
+                <div className="mb-4">
+                  <h1 className="text-xl font-bold text-mars-blue-primary mb-2">{slide.title}</h1>
+                  <div className="w-full h-1 bg-primary rounded"></div>
+                </div>
+                
+                <div className="flex-1 space-y-3">
+                  {slide.content.map((item, index) => (
+                    <div key={index} className="flex items-start gap-2">
+                      <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
+                      <p className="text-sm text-mars-blue-primary">{item}</p>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
             
             {slide.notes && (
               <div className="mt-4 p-3 bg-mars-blue-light/10 rounded text-xs text-mars-blue-primary/70">
