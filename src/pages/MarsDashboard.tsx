@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { MessageCircle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { LoadingScreen } from '@/components/LoadingScreen';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { MarsHeaderNav } from '@/components/MarsHeaderNav';
@@ -49,9 +51,7 @@ export const MarsDashboard = () => {
         )}
         
         <main className={`flex-1 p-6 transition-all duration-300 min-w-0 ${
-          isNavCollapsed ? 'ml-0' : 'ml-0'
-        } ${
-          isChatCollapsed ? 'mr-0' : 'mr-0'
+          isChatCollapsed ? '' : 'pr-0'
         }`}>
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
             <TabsContent value="executive" className="space-y-6">
@@ -88,11 +88,13 @@ export const MarsDashboard = () => {
           </Tabs>
         </main>
 
-        <OpenAIChat
-          isCollapsed={isChatCollapsed}
-          onToggle={() => setIsChatCollapsed(!isChatCollapsed)}
-          currentContext={tabContextMap[activeTab]}
-        />
+        {!isChatCollapsed && (
+          <OpenAIChat
+            isCollapsed={isChatCollapsed}
+            onToggle={() => setIsChatCollapsed(!isChatCollapsed)}
+            currentContext={tabContextMap[activeTab]}
+          />
+        )}
       </div>
       
       {/* Navigation toggle when collapsed */}
@@ -103,6 +105,18 @@ export const MarsDashboard = () => {
           isCollapsed={isNavCollapsed}
           onToggle={() => setIsNavCollapsed(!isNavCollapsed)}
         />
+      )}
+      
+      {/* Chat toggle when collapsed */}
+      {isChatCollapsed && (
+        <div className="fixed right-4 bottom-4 z-10">
+          <Button
+            onClick={() => setIsChatCollapsed(false)}
+            className="rounded-full w-14 h-14 bg-primary hover:bg-primary/90 shadow-glow animate-pulse-glow"
+          >
+            <MessageCircle className="h-6 w-6" />
+          </Button>
+        </div>
       )}
     </div>
   );
